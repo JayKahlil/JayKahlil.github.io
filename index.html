@@ -22,7 +22,7 @@
 				<span id="timer"></span>
 			</div>
 			<div id="mysteryMachine">
-				<img src="/im/mystery.png" id="mystery" onclick="randomSound()"/>
+				<img src="/im/mystery.png" id="mystery"/>
 			</div>
 		</div>
 		<script>
@@ -76,6 +76,8 @@
 				sound.src = "/audio/" + fileName + ".wav";
 				sound.play();
 			}
+
+            document.getElementById("mystery").addEventListener("click", randomSound, false)
 		</script>
 	</body>
 </html>
