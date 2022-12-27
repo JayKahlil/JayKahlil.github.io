@@ -1,0 +1,405 @@
+/*#soundBox {
+	padding: 1vw;
+	height: 100%;
+	display: inline;
+	position: absolute;
+}
+
+img {
+	max-width: 10vw;
+	max-height: 10vw;
+	padding: 1vw;
+	margin-left: auto;
+	margin-right: auto;
+}
+*/
+/*Testing new alignment of images*/
+#soundBox2 {
+	display: grid;
+	grid-template-columns: auto auto auto auto auto auto auto;
+	justify-content: space-evenly;
+	align-content: center;
+	grid-row-gap: 3.75vw; /*100-([no. cols]7*[icon width]10vw) = 30. 30/8[gaps] | always 30/gaps*/
+	padding-top: 3.75vw;
+	padding-bottom: 3.75vw;
+}
+
+#soundBox2 div {
+	width: 10vw; /*70/[no cols] | You want icons to take ~70% of width. Exception is phones, it seems. That's 64%*/
+	height: 10vw;
+	text-align: center;
+}
+
+#soundBox2 div:before {
+	content: "";
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+}
+
+#soundBox2 div img {
+	max-width: 100%;
+	max-height: 100%;
+	vertical-align: middle;
+}
+
+#mysteryMachine {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 50vh;
+}
+
+#mysteryMachine img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+#container2 {
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+#pageinfo {
+	position: relative;
+	bottom: 0;
+	width: 100%;
+}
+
+body {
+	position: relative;
+	background-color: #333333;
+	background: linear-gradient(135deg, #FFD000, #42B6FF);
+	margin: 0;
+}
+
+#mysteryBG {
+	background-color: #FF7AFA;
+	background: linear-gradient(135deg, #083F36, #FF7AFA);
+}
+
+#pageinfo p {
+	color: grey;
+	font-size: smaller;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+}
+
+#infoBox {
+	position: fixed;
+	z-index: 10;
+	text-align: center;
+	vertical-align: center;
+	transform:translate(-50%, -50%);
+	top: 50%;
+	left: 50%
+}
+
+#timer {
+	font-size: 10vw;
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+	-webkit-text-stroke: 5px black;
+}
+
+.rainbowpulse {
+	animation: rainbow 2s infinite linear, pulse 1s infinite linear;
+}
+
+.rainbow {
+	-webkit-animation-name: rainbow;
+	-webkit-animation-duration: 2s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+	-moz-animation-name: rainbow;
+	-moz-animation-duration: 2s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-timing-function: linear;
+	-ms-animation-name: rainbow;
+	-ms-animation-duration: 2s;
+	-ms-animation-iteration-count: infinite;
+	-ms-animation-timing-function: linear;
+}
+
+@-moz-keyframes rainbow {
+	0% {-moz-filter:drop-shadow(2px 2px 0 #ff0000)
+		drop-shadow(-2px 2px 0 #ff0000)
+		drop-shadow(2px -2px 0 #ff0000)
+		drop-shadow(-2px -2px 0 #ff0000);}
+	10% {-moz-filter:drop-shadow(2px 2px 0 #ff8000)
+		drop-shadow(-2px 2px 0 #ff8000)
+		drop-shadow(2px -2px 0 #ff8000)
+		drop-shadow(-2px -2px 0 #ff8000);}
+	20% {-moz-filter:drop-shadow(2px 2px 0 #ffff00)
+		drop-shadow(-2px 2px 0 #ffff00)
+		drop-shadow(2px -2px 0 #ffff00)
+		drop-shadow(-2px -2px 0 #ffff00);}
+	30% {-moz-filter:drop-shadow(2px 2px 0 #80ff00)
+		drop-shadow(-2px 2px 0 #80ff00)
+		drop-shadow(2px -2px 0 #80ff00)
+		drop-shadow(-2px -2px 0 #80ff00);}
+	40% {-moz-filter:drop-shadow(2px 2px 0 #00ff00)
+		drop-shadow(-2px 2px 0 #00ff00)
+		drop-shadow(2px -2px 0 #00ff00)
+		drop-shadow(-2px -2px 0 #00ff00);}
+	50% {-moz-filter:drop-shadow(2px 2px 0 #00ff80)
+		drop-shadow(-2px 2px 0 #00ff80)
+		drop-shadow(2px -2px 0 #00ff80)
+		drop-shadow(-2px -2px 0 #00ff80);}
+	60% {-moz-filter:drop-shadow(2px 2px 0 #00ffff)
+		drop-shadow(-2px 2px 0 #00ffff)
+		drop-shadow(2px -2px 0 #00ffff)
+		drop-shadow(-2px -2px 0 #00ffff);}
+	70% {-moz-filter:drop-shadow(2px 2px 0 #0080ff)
+		drop-shadow(-2px 2px 0 #0080ff)
+		drop-shadow(2px -2px 0 #0080ff)
+		drop-shadow(-2px -2px 0 #0080ff);}
+	80% {-moz-filter:drop-shadow(2px 2px 0 #0000ff)
+		drop-shadow(-2px 2px 0 #0000ff)
+		drop-shadow(2px -2px 0 #0000ff)
+		drop-shadow(-2px -2px 0 #0000ff);}
+	90% {-moz-filter:drop-shadow(2px 2px 0 #0080ff)
+		drop-shadow(-2px 2px 0 #0080ff)
+		drop-shadow(2px -2px 0 #0080ff)
+		drop-shadow(-2px -2px 0 #0080ff);}
+	100% {-moz-filter:drop-shadow(2px 2px 0 #ff0080)
+		drop-shadow(-2px 2px 0 #ff0080)
+		drop-shadow(2px -2px 0 #ff0080)
+		drop-shadow(-2px -2px 0 #ff0080);}
+}
+
+@-webkit-keyframes rainbow {
+	0% {-webkit-filter:drop-shadow(2px 2px 0 #ff0000)
+		drop-shadow(-2px 2px 0 #ff0000)
+		drop-shadow(2px -2px 0 #ff0000)
+		drop-shadow(-2px -2px 0 #ff0000);}
+	10% {-webkit-filter:drop-shadow(2px 2px 0 #ff8000)
+		drop-shadow(-2px 2px 0 #ff8000)
+		drop-shadow(2px -2px 0 #ff8000)
+		drop-shadow(-2px -2px 0 #ff8000);}
+	20% {-webkit-filter:drop-shadow(2px 2px 0 #ffff00)
+		drop-shadow(-2px 2px 0 #ffff00)
+		drop-shadow(2px -2px 0 #ffff00)
+		drop-shadow(-2px -2px 0 #ffff00);}
+	30% {-webkit-filter:drop-shadow(2px 2px 0 #80ff00)
+		drop-shadow(-2px 2px 0 #80ff00)
+		drop-shadow(2px -2px 0 #80ff00)
+		drop-shadow(-2px -2px 0 #80ff00);}
+	40% {-webkit-filter:drop-shadow(2px 2px 0 #00ff00)
+		drop-shadow(-2px 2px 0 #00ff00)
+		drop-shadow(2px -2px 0 #00ff00)
+		drop-shadow(-2px -2px 0 #00ff00);}
+	50% {-webkit-filter:drop-shadow(2px 2px 0 #00ff80)
+		drop-shadow(-2px 2px 0 #00ff80)
+		drop-shadow(2px -2px 0 #00ff80)
+		drop-shadow(-2px -2px 0 #00ff80);}
+	60% {-webkit-filter:drop-shadow(2px 2px 0 #00ffff)
+		drop-shadow(-2px 2px 0 #00ffff)
+		drop-shadow(2px -2px 0 #00ffff)
+		drop-shadow(-2px -2px 0 #00ffff);}
+	70% {-webkit-filter:drop-shadow(2px 2px 0 #0080ff)
+		drop-shadow(-2px 2px 0 #0080ff)
+		drop-shadow(2px -2px 0 #0080ff)
+		drop-shadow(-2px -2px 0 #0080ff);}
+	80% {-webkit-filter:drop-shadow(2px 2px 0 #0000ff)
+		drop-shadow(-2px 2px 0 #0000ff)
+		drop-shadow(2px -2px 0 #0000ff)
+		drop-shadow(-2px -2px 0 #0000ff);}
+	90% {-webkit-filter:drop-shadow(2px 2px 0 #0080ff)
+		drop-shadow(-2px 2px 0 #0080ff)
+		drop-shadow(2px -2px 0 #0080ff)
+		drop-shadow(-2px -2px 0 #0080ff);}
+	100% {-webkit-filter:drop-shadow(2px 2px 0 #ff0080)
+		drop-shadow(-2px 2px 0 #ff0080)
+		drop-shadow(2px -2px 0 #ff0080)
+		drop-shadow(-2px -2px 0 #ff0080);}
+}
+
+@keyframes rainbow {
+	0% {filter:drop-shadow(2px 2px 0 #ff0000)
+		drop-shadow(-2px 2px 0 #ff0000)
+		drop-shadow(2px -2px 0 #ff0000)
+		drop-shadow(-2px -2px 0 #ff0000);}
+	10% {filter:drop-shadow(2px 2px 0 #ff8000)
+		drop-shadow(-2px 2px 0 #ff8000)
+		drop-shadow(2px -2px 0 #ff8000)
+		drop-shadow(-2px -2px 0 #ff8000);}
+	20% {filter:drop-shadow(2px 2px 0 #ffff00)
+		drop-shadow(-2px 2px 0 #ffff00)
+		drop-shadow(2px -2px 0 #ffff00)
+		drop-shadow(-2px -2px 0 #ffff00);}
+	30% {filter:drop-shadow(2px 2px 0 #80ff00)
+		drop-shadow(-2px 2px 0 #80ff00)
+		drop-shadow(2px -2px 0 #80ff00)
+		drop-shadow(-2px -2px 0 #80ff00);}
+	40% {filter:drop-shadow(2px 2px 0 #00ff00)
+		drop-shadow(-2px 2px 0 #00ff00)
+		drop-shadow(2px -2px 0 #00ff00)
+		drop-shadow(-2px -2px 0 #00ff00);}
+	50% {filter:drop-shadow(2px 2px 0 #00ff80)
+		drop-shadow(-2px 2px 0 #00ff80)
+		drop-shadow(2px -2px 0 #00ff80)
+		drop-shadow(-2px -2px 0 #00ff80);}
+	60% {filter:drop-shadow(2px 2px 0 #00ffff)
+		drop-shadow(-2px 2px 0 #00ffff)
+		drop-shadow(2px -2px 0 #00ffff)
+		drop-shadow(-2px -2px 0 #00ffff);}
+	70% {filter:drop-shadow(2px 2px 0 #0080ff)
+		drop-shadow(-2px 2px 0 #0080ff)
+		drop-shadow(2px -2px 0 #0080ff)
+		drop-shadow(-2px -2px 0 #0080ff);}
+	80% {filter:drop-shadow(2px 2px 0 #0000ff)
+		drop-shadow(-2px 2px 0 #0000ff)
+		drop-shadow(2px -2px 0 #0000ff)
+		drop-shadow(-2px -2px 0 #0000ff);}
+	90% {filter:drop-shadow(2px 2px 0 #0080ff)
+		drop-shadow(-2px 2px 0 #0080ff)
+		drop-shadow(2px -2px 0 #0080ff)
+		drop-shadow(-2px -2px 0 #0080ff);}
+	100% {filter:drop-shadow(2px 2px 0 #ff0080)
+		drop-shadow(-2px 2px 0 #ff0080)
+		drop-shadow(2px -2px 0 #ff0080)
+		drop-shadow(-2px -2px 0 #ff0080);}
+}
+
+img.pulse {	
+	-webkit-animation-name: pulse;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+	-moz-animation-name: pulse;
+	-moz-animation-duration: 1s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-timing-function: linear;
+	-ms-animation-name: pulse;
+	-ms-animation-duration: 1s;
+	-ms-animation-iteration-count: infinite;
+	-ms-animation-timing-function: linear;
+}
+
+@-moz-keyframes pulse {
+	0% { -moz-transform: scale(1) rotate(0deg); }
+	50% { -moz-transform: scale(4) rotate(180deg); }
+	100% { -moz-transform: scale(1) rotate(360deg); }
+}
+
+@-webkit-keyframes pulse {
+	0% { -webkit-transform: scale(1) rotate(0deg); }
+	50% { -webkit-transform: scale(4) rotate(180deg); }
+	100% { -webkit-transform: scale(1) rotate(360deg); }
+}
+
+@keyframes pulse {
+	0% {transform:scale(1) rotate(0deg);}
+	50% {transform:scale(4) rotate(180deg);}
+	100% {transform:scale(1) rotate(360deg);}
+}
+
+
+/*
+Icon size = 70% width = 70/[no. cols]
+gaps = 30% width = 30 / [no. gaps]
+
+*/
+
+/* phone only */
+@media (max-width: 599px), (-webkit-device-pixel-ratio: 2), {
+	#soundBox2 {
+		display: grid;
+		grid-template-columns: auto auto auto auto;
+		justify-content: space-evenly;
+		align-content: center;
+		grid-row-gap: 7.2vw;
+		padding-top: 7.2vw;
+		padding-bottom: 7.2vw;
+	}
+
+	#soundBox2 div {
+		text-align: center;
+		height: 16vw;
+		width: 16vw;
+	}
+}
+
+/* tablet up */
+@media (min-width: 600px){
+	#soundBox2 {
+		display: grid;
+		grid-template-columns: auto auto auto auto auto;
+		justify-content: space-evenly;
+		align-content: center;
+		grid-row-gap: 6vw;
+		padding-top: 6vw;
+		padding-bottom: 6vw;
+	}
+
+	#soundBox2 div {
+		text-align: center;
+		height: 14vw;
+		width: 14vw;
+	}
+}
+
+/* tablet landscape up */
+@media (min-width: 900px){
+	#soundBox2 {
+		display: grid;
+		grid-template-columns: auto auto auto auto auto auto;
+		justify-content: space-evenly;
+		align-content: center;
+		grid-row-gap: 5vw;
+		padding-top: 5vw;
+		padding-bottom: 5vw;
+	}
+
+	#soundBox2 div {
+		text-align: center;
+		height: 11.66vw;
+		width: 11.66vw;
+	}
+}
+
+/* desktop up */
+@media (min-width: 1200px){
+	#soundBox2 {
+		display: grid;
+		grid-template-columns: auto auto auto auto auto auto auto;
+		justify-content: space-evenly;
+		align-content: center;
+		grid-row-gap: 3.75vw;
+		padding-top: 3.75vw;
+		padding-bottom: 3.75vw;
+	}
+
+	#soundBox2 div {
+		text-align: center;
+		height: 10vw;
+		width: 10vw;
+	}
+}
+
+/* big desktop up */
+@media (min-width: 1800px){
+	#soundBox2 {
+		display: grid;
+		grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+		justify-content: space-evenly;
+		align-content: center;
+		grid-row-gap: 3vw;
+		padding-top: 3vw;
+		padding-bottom: 3vw;
+	}
+
+	#soundBox2 div {
+		text-align: center;
+		height: 7vw;
+		width: 7vw;
+	}
+}
+
+
+
