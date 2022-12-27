@@ -52,9 +52,11 @@
 			});
 			
             function randomSound() {
+                console.log("HI")
                 let keyArray = Object.keys(sounds)
                 let soundName = keyArray[Math.floor(Math.random() * keyArray.length)]
                 let altNumber = sounds[soundName]
+                console.log(soundName)
                 playIt(soundName, altNumebr)
             }
 			
