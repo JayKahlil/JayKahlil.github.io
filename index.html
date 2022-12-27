@@ -25,59 +25,6 @@
 				<img src="./im/mystery.png" id="mystery"/>
 			</div>
 		</div>
-		<script>
-            import { sounds } from './sounds.js'
-
-			var sound = new Audio();
-			var soundDone;
-			
-			sound.addEventListener("timeupdate", function(){
-				var currentTime = sound.currentTime;
-				var duration = sound.duration;
-				var timeLeft = parseFloat(duration - currentTime).toFixed(2);
-				
-				if(soundDone){
-					document.getElementById("timer").textContent="";
-				} else{
-					document.getElementById("timer").textContent=timeLeft;
-
-				}
-			});
-			
-			sound.addEventListener("ended", function(){
-				soundDone = true;
-				document.getElementById("mystery").className = "";
-				sound.currentTime = 0;
-				document.getElementById("timer").textContent="";
-			});
-			
-            document.getElementById("mystery").addEventListener("click", randomSound, false)
-
-            function randomSound() {
-                console.log("HI")
-                let keyArray = Object.keys(sounds)
-                let soundName = keyArray[Math.floor(Math.random() * keyArray.length)]
-                let altNumber = sounds[soundName]
-                console.log(soundName)
-                playIt(soundName, altNumebr)
-            }
-			
-			
-			function playIt(name, altNumber){
-                if (altNumber > 0) {
-                    chosenAlt = Math.floor((Math.random() * altNum) + 1)
-                    let fileName = name + chosenAlt
-                } else {
-                    let fileName = name
-                }
-
-				soundDone = false; //Used for removing the timer when the sound has finished.
-				
-				document.getElementById("mystery").classList.add('rainbowpulse');
-				
-				sound.src = "/audio/" + fileName + ".wav";
-				sound.play();
-			}
-		</script>
+		<script  src="./mystery.js"></script>
 	</body>
 </html>
