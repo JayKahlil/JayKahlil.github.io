@@ -1,7 +1,7 @@
 <html lang="en">
 	<head>
 		<title>Emergency Meme</title>
-		<link rel="stylesheet" type="text/css" href="/style/soundboard.aaa112.css">
+		<link rel="stylesheet" type="text/css" href="./style/soundboard.aaa112.css">
 		<!--Web app stuff-->
 		<link rel="apple-touch-icon" href="/web-app/mystery-ios-180.png">
 		<link rel="apple-touch-icon" sizes="152x152" href="/web-app/mystery-ios-152.png">
@@ -22,7 +22,7 @@
 				<span id="timer"></span>
 			</div>
 			<div id="mysteryMachine">
-				<img src="/im/mystery.png" id="mystery"/>
+				<img src="./im/mystery.png" id="mystery"/>
 			</div>
 		</div>
 		<script>
@@ -51,6 +51,8 @@
 				document.getElementById("timer").textContent="";
 			});
 			
+            document.getElementById("mystery").addEventListener("click", randomSound, false)
+
             function randomSound() {
                 console.log("HI")
                 let keyArray = Object.keys(sounds)
@@ -76,8 +78,6 @@
 				sound.src = "/audio/" + fileName + ".wav";
 				sound.play();
 			}
-
-            document.getElementById("mystery").addEventListener("click", randomSound, false)
 		</script>
 	</body>
 </html>
