@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Degrees of Separation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Degrees of Separation</h1>
+    <p>Enter a TMDB film ID</p>
+    <form id="film-form" style="margin-bottom: 1.5rem;">
+      <input type="text" id="film-id-input" placeholder="Enter TMDB Film ID" style="padding:0.5em; font-size:1em; border-radius:6px; border:1px solid #ccc;">
+      <button type="submit" style="padding:0.5em 1em; font-size:1em; border-radius:6px; border:none; background:#232a34; color:#fff; cursor:pointer;">Search</button>
+    </form>
+    <div class="grid" id="results-grid">
+        <!-- Results will be rendered here by JS -->
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
