@@ -87,10 +87,35 @@ body {
 }
 
 .actor-list {
-  margin: 0;
+  max-height: 7em;
+  overflow-y: auto;
+  margin: 0.5em 0 0 0;
   padding-left: 1.2em;
+  scrollbar-width: thin;
+  scrollbar-color: #7ed6df #23272a;
   color: #e0e0e0;
   font-size: 1rem;
+}
+
+.actor-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.actor-list::-webkit-scrollbar-thumb {
+  background: #7ed6df;
+  border-radius: 4px;
+}
+
+.actor-list::-webkit-scrollbar-track {
+  background: #23272a;
+  border-radius: 4px;
+}
+
+.release-date {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  font-size: 1em;
+  color: #b2bec3;
 }
 
 .grid {
