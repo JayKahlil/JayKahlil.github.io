@@ -1,0 +1,147 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Click for more!</title>
+    <link rel="stylesheet" href="style202307031509.css" />
+</head>
+
+<body>
+    <div class="container">
+        <img src="template2.png" />
+        <div id="podium-box">
+            <!--<div id="podium"></div>-->
+            <div id="wood">
+                <div id="blue">
+                    <div id="label"></div>
+                </div>
+            </div>
+        </div>
+        <div id="list">
+            <div class="priorities">OUR PRIORITIES</div>
+            <div class="item" id="item1"></div>
+            <div class="item" id="item2"></div>
+            <div class="item" id="item3"></div>
+            <div class="item" id="item4"></div>
+            <div class="item" id="item5"></div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function generate() {
+        const type = Math.floor(Math.random() * 3);
+
+        var chooser = randomNoRepeats(niceGroup[type]);
+        var currentPodiums = podiumsGroup[type];
+        var currentNasty = nastyGroup[type];
+
+        document.getElementById("label").innerHTML =
+            currentPodiums[Math.floor(Math.random() * currentPodiums.length)];
+        document.getElementById("item1").innerHTML = chooser();
+        document.getElementById("item2").innerHTML = chooser();
+        document.getElementById("item3").innerHTML = chooser();
+        document.getElementById("item4").innerHTML = chooser();
+        document.getElementById("item5").innerHTML =
+            currentNasty[Math.floor(Math.random() * currentNasty.length)];
+    }
+
+    window.onload = generate;
+
+    document.onclick = generate;
+
+    const niceItems = [
+        "Chocolate",
+        "Pickles",
+        "Feathers",
+        "Light bulbs",
+        "Flowers",
+        "Fresh bread",
+        "Jelly",
+        "Cake",
+    ];
+    const nastyItems = [
+        "Rat poison",
+        "Acid",
+        "Mud",
+        "Tears of foreigners",
+        "Souls of the damned",
+        "25,000 tonnes of nuclear waste",
+        "480,000 gallons of raw sewage",
+    ];
+    const niceThings = [
+        "Extra hugs",
+        "More rainbows",
+        "Increased wages",
+        "Fairer wages",
+        "Nationalised water",
+        "Nationalised energy",
+        "More taxes for the rich",
+        "More nurses",
+        "Shorter NHS waits",
+        "Affordable housing",
+        "New bank holiday",
+    ];
+    const nastyThings = [
+        "Shred the poor",
+        "Declare war on orphans",
+        "Just fuck shit up",
+        "Punch penguins",
+        "Privatised oxygen",
+        "Make uggos fight to the death",
+    ];
+    const itemPodiums = [
+        "My shopping list",
+        "My top five",
+        "Tonight's menu",
+        "First aid, reimagined",
+    ];
+    const thingPodiums = [
+        "Bettering Britain",
+        "Economic Plan",
+        "Conservatives 2025",
+    ];
+    const activityPodiums = [
+        "Date night",
+        "First date ideas",
+        "Bojo's stag do",
+        "My long weekend",
+        "My birthday party",
+    ];
+    const niceActivities = [
+        "Watch a movie",
+        "Fancy dinner",
+        "Feed the ducks",
+        "Rollerskating",
+        "Walk on the beach",
+        "Bike ride",
+        "Grab drinks",
+    ];
+    const nastyActivities = [
+        "Throw stones at poor people",
+        "Kick children",
+        "Burn down a care home",
+        "Steal from a soup kitchen",
+        "Destabilise a third world government",
+    ];
+
+    const niceGroup = [niceItems, niceThings, niceActivities];
+    const nastyGroup = [nastyItems, nastyThings, nastyActivities];
+    const podiumsGroup = [itemPodiums, thingPodiums, activityPodiums];
+
+    //https://stackoverflow.com/a/17891411/11381679
+    function randomNoRepeats(array) {
+        var copy = array.slice(0);
+        return function() {
+            if (copy.length < 1) {
+                copy = array.slice(0);
+            }
+            var index = Math.floor(Math.random() * copy.length);
+            var item = copy[index];
+            copy.splice(index, 1);
+            return item;
+        };
+    }
+</script>
+
+</html>

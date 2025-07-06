@@ -1,0 +1,144 @@
+body {
+	font-family: sans-serif;
+	margin: 0;
+}
+
+.container {
+	position: relative;
+	width: 100vw;
+	container-type: inline-size;
+	container-name: wrapper;
+}
+
+.container img {
+	width: 100%;
+	height: auto;
+}
+
+#podium-box {
+	z-index: 100;
+	position: absolute;
+	color: white;
+	left: 49.5%;
+	top: 62.5%;
+	transform: translateX(-50%);
+	text-transform: uppercase;
+}
+
+#podium {
+	font-size: 3vw;
+	font-weight: bold;
+	margin: 0;
+	text-shadow: 0 0 1px white;
+}
+
+#wood {
+	background-image: url("wood-tile-55.png");
+	padding: 1.7vw;
+}
+
+#blue {
+	background-color: #414065;
+	padding: 2vw 3vw;
+	-moz-box-shadow: inset 2px 2px 8px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: inset 2px 2px 8px rgba(0, 0, 0, .5);
+	box-shadow: inset 2px 2px 8px rgba(0, 0, 0, .5);
+}
+
+#label {
+	background-color: #FF4D70;
+	font-size: 3vw;
+	font-weight: bold;
+	text-shadow: 0 0 1px white;
+	text-align: center;
+	padding: .5vw;
+	min-width: 40vw;
+	-moz-box-shadow: 0 0 4px #FF4D70;
+	-webkit-box-shadow: 0 0 4px #FF4D70;
+	box-shadow: 0 0 4px #FF4D70;
+}
+
+#list {
+	z-index: 100;
+	position: absolute;
+	color: white;
+	left: 67%;
+	top: 12%;
+	/*transform: translateY(-50&);*/
+	text-transform: uppercase;
+	font-size: 1.2vw;
+	font-weight: bold;
+	counter-reset: list-counter;
+}
+
+.item::before {
+	content: counter(list-counter) " ";
+	color: #807A94;
+	font-weight: bolder;
+	font-size: 2.1vw;
+	text-shadow: 0 0 1px #807A94;
+	margin-right: 1vw;
+}
+
+.item {
+	margin: 0;
+	counter-increment: list-counter;
+	text-shadow: 0 0 1px white;
+	display: flex;
+	align-items: center;
+	font-size: 1.2vw;
+}
+
+.priorities {
+	background-color: #F06F85;
+	font-size: 2vw;
+	padding-top: .4vw;
+	padding-bottom: .4vw;
+	padding-left: .5vw;
+	padding-right: .5vw;
+	-moz-box-shadow: 0 0 4px #F06F85;
+	-webkit-box-shadow: 0 0 4px #F06F85;
+	box-shadow: 0 0 4px #F06F85;
+	display: inline-block;
+	text-shadow: 0 0 1px white;
+	margin-bottom: 1vw;
+}
+
+/*@container wrapper (min-width: 1px){
+	#list {
+		font-size: 2cqw;
+	}
+	
+	.item {
+		margin-top: 0;
+		/*margin-bottom: .4cqh;
+		margin-bottom: .25cqw;
+		margin-left: 0;
+		margin-right: 0;
+	}
+}*/
+
+/*
+#item1 {
+	margin: 0;
+}
+
+#item2 {
+	margin: 0;
+	padding-top: 1%;
+}
+
+#item3 {
+	margin: 0;
+	padding-top: .25vw;
+}
+
+#item4 {
+	margin: 0;
+	padding-top: .25vw;
+}
+
+#item5 {
+	margin: 0;
+	padding-top: .25vw;
+}/*
