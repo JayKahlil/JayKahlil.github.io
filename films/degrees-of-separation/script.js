@@ -84,12 +84,13 @@ filmNameForm.addEventListener('submit', async function(e) {
 
 async function fetchDegreesOfSeparation(filmId) {
   const grid = document.getElementById('results-grid');
+  const originalFilm = document.getElementById('original-film');
+  originalFilm.innerHTML = '';
   grid.innerHTML = '<div style="color:#fff;">Loading...</div>';
   try {
     const res = await fetch(`https://gj02gkjp69.execute-api.eu-west-1.amazonaws.com/stuff/degrees-of-separation?film-id=${encodeURIComponent(filmId)}`);
     if (!res.ok) throw new Error('Network response was not ok');
     const data = await res.json();
-    const originalFilm = document.getElementById('original-film');
     const date = new Date(data.original_film.release_date);
     const formattedDate = date.toLocaleDateString('en-GB', { year: 'numeric' });
     originalFilm.innerHTML = `Connections to: <a href="https://letterboxd.com/tmdb/${data.original_film.id}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">${data.original_film.title} (${formattedDate})</a>`;
