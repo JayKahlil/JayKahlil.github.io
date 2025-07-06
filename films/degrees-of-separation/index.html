@@ -8,11 +8,18 @@
 </head>
 <body>
     <h1>Degrees of Separation</h1>
-    <p>Enter a TMDB film ID</p>
+    <p>Search for a film</p>
+    <form id="film-name-form" style="margin-bottom: 0.5rem;">
+      <input type="text" id="film-name-input" placeholder="Enter film name" style="padding:0.5em; font-size:1em; border-radius:6px; border:1px solid #ccc;">
+      <button type="submit" style="padding:0.5em 1em; font-size:1em; border-radius:6px; border:none; background:#232a34; color:#fff; cursor:pointer;">Search by Name</button>
+    </form>
+    <div id="film-name-results" style="margin-bottom:0.5rem;"></div>
+    <p>Or enter a TMDB film ID</p>
     <form id="film-form" style="margin-bottom: 1.5rem;">
       <input type="text" id="film-id-input" placeholder="Enter TMDB Film ID" style="padding:0.5em; font-size:1em; border-radius:6px; border:1px solid #ccc;">
       <button type="submit" style="padding:0.5em 1em; font-size:1em; border-radius:6px; border:none; background:#232a34; color:#fff; cursor:pointer;">Search</button>
     </form>
+    <div id="original-film"></div>
     <div class="grid" id="results-grid">
         <!-- Results will be rendered here by JS -->
     </div>
