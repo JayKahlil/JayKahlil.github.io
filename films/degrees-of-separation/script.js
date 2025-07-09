@@ -72,6 +72,9 @@ async function fetchDegreesOfSeparation(filmId) {
                 </a>
               </h2>
               <p class="release-date">${movie.release_date ? new Date(movie.release_date).toLocaleDateString('en-GB', { year: 'numeric' }) : 'Unknown Release Date'}</p>
+              <div class="star-rating" title="${typeof movie.rating_of_10 === 'number' ? movie.rating_of_10.toFixed(1) + ' / 10' : 'No rating'}">
+                ${typeof movie.rating_of_10 === 'number' ? renderStars(movie.rating_of_10) : '<span style="color:#636e72;">No rating</span>'}
+              </div>
               <a href="${movie.link}" target="_blank" rel="noopener" class="tmdb-link">View on TMDB</a>
               <ul class="actor-list">
                 ${(movie.shared_actors || []).map(actor => `<li>${actor}</li>`).join('')}
@@ -96,4 +99,16 @@ filmForm.addEventListener('submit', function(e) {
   if (!filmId) return;
   fetchDegreesOfSeparation(filmId);
 });
+
+function renderStars(rating) {
+  const fullStars = Math.floor(rating / 2);
+  const halfStar = rating % 2 >= 1 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+  let stars = '';
+  for (let i = 0; i < fullStars; i++) stars += '<span class="star">★</span>';
+  if (halfStar) stars += '<span class="star">☆</span>';
+  for (let i = 0; i < emptyStars; i++) stars += '<span class="star empty">★</span>';
+  stars += `<span class="star-numeric">${rating.toFixed(1)} / 10</span>`;
+  return stars;
+}
 

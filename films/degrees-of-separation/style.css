@@ -172,3 +172,24 @@ body {
   opacity: 1;
   text-decoration: underline;
 }
+
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  margin: 0.2em 0 0.2em 0;
+  font-size: 1.1em;
+}
+.star {
+  color: #f1c40f;
+  font-size: 1.2em;
+  margin-right: 0.05em;
+}
+.star.empty {
+  color: #636e72;
+}
+.star-numeric {
+  color: #b2bec3;
+  font-size: 0.98em;
+  margin-left: 0.4em;
+}
