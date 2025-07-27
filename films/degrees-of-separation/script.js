@@ -61,6 +61,8 @@ async function fetchDegreesOfSeparation(filmId) {
     originalFilm.innerHTML = `Connections to: <a href="https://letterboxd.com/tmdb/${data.original_film.id}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">${data.original_film.title} (${formattedDate})</a>`;
     grid.innerHTML = '';
     if (Array.isArray(data.options) && data.options.length > 0) {
+      // Sort by rating_of_10, highest first
+      data.options.sort((a, b) => (b.rating_of_10 || 0) - (a.rating_of_10 || 0));
       data.options.forEach(movie => {
         grid.innerHTML += `
           <div class="glass-card">
