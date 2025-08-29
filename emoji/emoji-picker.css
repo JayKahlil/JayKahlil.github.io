@@ -1,0 +1,69 @@
+
+body {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 55%, #fbc2eb 100%);
+    animation: bgmove 10s linear infinite alternate;
+}
+
+@keyframes bgmove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+
+/* Funky, readable heading with solid color and contrast */
+h1 {
+    margin-bottom: 32px;
+    font-size: 3.2rem;
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    color: #222;
+    background: none;
+    text-shadow: 2px 2px 0 #fff200, 0 0 8px #ff6b81;
+}
+
+.emoji-container {
+    display: flex;
+    gap: 64px;
+    margin-bottom: 40px;
+    justify-content: center;
+}
+
+.emoji {
+    font-size: 6rem;
+    cursor: pointer;
+    transition: transform 0.18s, filter 0.18s;
+    filter: drop-shadow(0 0 16px #fff200) drop-shadow(0 0 8px #ff6b81);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fff200 0%, #ff6b81 100%);
+    box-shadow: 0 0 32px 0 #fbc2eb88, 0 0 8px 0 #fff20088;
+    padding: 0.5em 0.7em;
+    border: 3px dashed #fff200;
+}
+.emoji:hover {
+    transform: scale(1.25) rotate(-10deg);
+    filter: drop-shadow(0 0 32px #fff200) drop-shadow(0 0 16px #ff6b81);
+    background: linear-gradient(135deg, #ff6b81 0%, #fff200 100%);
+    border: 3px solid #ff6b81;
+}
+
+.loading {
+    font-size: 2rem;
+    color: #fff200;
+    text-shadow: 0 0 8px #ff6b81, 0 0 4px #fff;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    animation: pulse 1.2s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
