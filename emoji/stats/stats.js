@@ -1,3 +1,5 @@
+import { EMOJIS } from '../constants.js';
+
 const CLOCKS = [
     "🕐", "🕜",
     "🕑", "🕝",
@@ -24,7 +26,7 @@ function drawClockSegments(values) {
     ctx.clearRect(0, 0, w, h);
     const cx = w / 2;
     const cy = h / 2;
-    const rMax = Math.min(w, h) / 2 - 30;
+    const rMax = Math.min(w, h) / 2 - 40;
     const rMin = 24;
     const n = 24;
     const maxVal = Math.max(...values, 1);
@@ -52,13 +54,13 @@ function drawClockSegments(values) {
     ctx.lineWidth = 3;
     ctx.stroke();
     // Draw clock emojis around the clock
-    ctx.font = `${Math.floor(rMax * 0.18)}px serif`;
+    ctx.font = `${Math.floor(rMax * 0.14)}px serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     for (let i = 0; i < n; i++) {
         const angle = -Math.PI / 2 + (i + 0.5) * angleStep;
         // Increase the radius for emoji placement
-        const emojiR = rMax + Math.floor(rMax * 0.13); // was 0.13, now 0.28 for more space
+        const emojiR = rMax + Math.floor(rMax * 0.14); // increased for more space
         const ex = cx + Math.cos(angle) * emojiR;
         const ey = cy + Math.sin(angle) * emojiR;
         ctx.save();
@@ -69,31 +71,54 @@ function drawClockSegments(values) {
     }
 }
 
-function getClockStats() {
-    // Fetch stats data from API and return processed values for clock segments
-    return fetch('https://zqdbog6asg.execute-api.eu-west-1.amazonaws.com/things/emoji-rankings?action=get_all')
-        .then(res => res.json())
-        .then(data => {
-            if (Array.isArray(data['rankings']) && data['rankings'].length > 0) {
-                // Process data to get fill values for each clock segment
-                const values = Array(24).fill(0);
-                data['rankings'].forEach(item => {
-                    const index = CLOCKS.indexOf(item.emoji);
-                    if (index !== -1) {
-                        values[index] = item.picked || 0;
-                    }
-                });
-                return values;
-            } else {
-                return Array(24).fill(0);
-            }
-        })
-        .catch(() => Array(24).fill(0));
+function getClockStats(rankings) {
+    // Process data to get fill values for each clock segment
+    const values = Array(24).fill(0);
+    rankings.forEach(item => {
+        const index = CLOCKS.indexOf(item.emoji);
+        if (index !== -1) {
+            values[index] = item.picked || 0;
+        }
+    });
+    return values;
 }
 
-// Example usage:
-document.addEventListener('DOMContentLoaded', () => {
-    getClockStats().then(values => {
-        drawClockSegments(values);
+
+const generalStatsTable = document.getElementById('general-stats').getElementsByTagName('tbody')[0];
+
+function renderGeneralStats(data) {
+    const totalPicked = data.reduce((sum, item) => sum + (typeof item.picked === 'number' ? item.picked : 0), 0);
+    const uniqueEmojis = data.length;
+    const totalEmojis = EMOJIS.length;
+    const percent = Math.round((uniqueEmojis / totalEmojis) * 100);
+    let rows = [];
+    rows.push(`
+        <tr>
+            <td>Choices Made</td>
+            <td>${totalPicked}</td>
+        </tr>
+    `);
+    rows.push(`
+        <tr>
+            <td>Unique Emojis Shown</td>
+            <td style="position:relative; min-width:120px;">
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width:${percent}%;"></div>
+                    <span class="progress-bar-label">${uniqueEmojis} / ${totalEmojis}</span>
+                </div>
+            </td>
+        </tr>
+    `);
+    generalStatsTable.innerHTML = rows.join('') || '<tr><td colspan="2" class="loading">No data found.</td></tr>';
+}
+
+
+fetch('https://zqdbog6asg.execute-api.eu-west-1.amazonaws.com/things/emoji-rankings?action=get_all')
+    .then(res => res.json())
+    .then(data => {
+        if (Array.isArray(data['rankings']) && data['rankings'].length > 0) {
+            renderGeneralStats(data['rankings']);
+            const clockStats = getClockStats(data['rankings']);
+            drawClockSegments(clockStats);
+        }
      });
-});
