@@ -56,6 +56,18 @@ h1 {
     text-shadow: 2px 2px 0 #fff200, 0 0 8px #ff6b81;
 }
 
+h2 {
+    margin-bottom: 20px;
+    font-size: 2.1rem;
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    color: #ff6b81;
+    background: none;
+    text-shadow: 1px 1px 0 #fff200, 0 0 6px #fad0c4;
+    text-align: center;
+}
+
 .emoji-container {
     display: flex;
     gap: 64px;
@@ -130,10 +142,6 @@ h1 {
     border: 2px solid #fff20044;
     transition: background 0.18s, color 0.18s, box-shadow 0.18s, border 0.18s;
     position: relative;
-}
-
-.active-page {
-    border: 2px solid #00000055 !important;
 }
 
 .emoji-nav a:hover {

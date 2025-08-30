@@ -1,0 +1,30 @@
+.clock-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 2em;
+    padding: 2em 0 2em 0;
+}
+#clock-canvas {
+    background: #fffbe6;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px #fad0c488;
+    width: 320px;
+    height: 320px;
+    max-width: 80vw;
+    max-height: 50vw;
+    display: block;
+    margin: 2em 0 2em 0;
+}
+@media (max-width: 600px) {
+    #clock-canvas {
+        width: 250px;
+        height: 250px;
+        max-height: 80vw;
+        margin: 1.2em 0 1.2em 0;
+    }
+    .clock-container {
+        padding: 1em 0 1em 0;
+    }
+}
