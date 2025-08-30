@@ -1,6 +1,7 @@
 import { EMOJIS } from '../constants.js';
 
 const CLOCKS = [
+    "🕛", "🕧",
     "🕐", "🕜",
     "🕑", "🕝",
     "🕒", "🕞",
@@ -11,8 +12,7 @@ const CLOCKS = [
     "🕗", "🕣",
     "🕘", "🕤",
     "🕙", "🕥",
-    "🕚", "🕦",
-    "🕛", "🕧"
+    "🕚", "🕦"
 ]
 
 // Usage: drawClockSegments([number, number, ..., number])
