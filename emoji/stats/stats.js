@@ -1,4 +1,4 @@
-import { EMOJIS } from '../constants.js';
+import { EMOJIS, COLOUR_MAP } from '../constants.js';
 
 const CLOCKS = [
     "🕛", "🕧",
@@ -151,6 +151,58 @@ function renderTopTenNumbers(data) {
     topTenTable.innerHTML = rows.join('') || '<tr><td colspan="5" class="loading">No data found.</td></tr>';
 }
 
+function getColourStats(data) {
+    const colourCounts = {
+        red: 0,
+        orange: 0,
+        yellow: 0,
+        green: 0,
+        blue: 0,
+        purple: 0,
+        brown: 0,
+        black: 0,
+        white: 0
+    };
+    data.filter(item => COLOUR_MAP.hasOwnProperty(item.emoji)).forEach(item => {
+        const colour = COLOUR_MAP[item.emoji];
+        colourCounts[colour] += item.picked || 0;
+    });
+    return colourCounts;
+}
+
+// Colour picked from part of the iOS emoji set
+// const COLOUR_TO_RGB = {
+//     "red": "rgb(195, 54, 36)",
+//     "orange": "rgb(208, 127, 46)",
+//     "yellow": "rgb(248, 216, 73)",
+//     "green": "rgb(77, 170, 49)",
+//     "blue": "rgb(30, 75, 189)",
+//     "purple": "rgb(156, 50, 246)",
+//     "brown": "rgb(106, 64, 32)",
+//     "black": "black",
+//     "white": "white"
+// }
+
+const COLOUR_TO_RGB = {
+    "red": "rgba(209, 25, 25, 1)",
+    "orange": "rgba(247, 146, 30, 1)",
+    "yellow": "rgba(255, 229, 61, 1)",
+    "green": "rgba(75, 208, 34, 1)",
+    "blue": "rgba(30, 35, 189, 1)",
+    "purple": "rgba(152, 42, 248, 1)",
+    "brown": "rgb(106, 64, 32)",
+    "black": "black",
+    "white": "white"
+}
+
+function renderRainbow(colourCounts) {
+    for (const [key, value] of Object.entries(colourCounts)) {
+        const degress = (value / Math.max(...Object.values(colourCounts), 1)) * 180;
+        document.getElementById('rainbow-' + key).style.background="conic-gradient(from 270deg, " + COLOUR_TO_RGB[key] + " " + degress + "deg, rgb(211, 211, 211) 0deg)";
+        document.getElementById('rainbow-' + key).title = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${value} picks`;
+    };
+}
+
 
 fetch('https://zqdbog6asg.execute-api.eu-west-1.amazonaws.com/things/emoji-rankings?action=get_all')
     .then(res => res.json())
@@ -160,5 +212,7 @@ fetch('https://zqdbog6asg.execute-api.eu-west-1.amazonaws.com/things/emoji-ranki
             const clockStats = getClockStats(data['rankings']);
             drawClockSegments(clockStats);
             renderTopTenNumbers(data['rankings'].filter(item => TOP_TEN.includes(item.emoji)));
+            const colourStats = getColourStats(data['rankings']);
+            renderRainbow(colourStats);
         }
      });
