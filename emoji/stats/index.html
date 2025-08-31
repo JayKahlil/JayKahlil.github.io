@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emoji Stats</title>
     <link rel="stylesheet" href="../emoji-picker.css">
+    <link rel="stylesheet" href="../leaderboard/leaderboard.css">
     <link rel="stylesheet" href="stats.css">
 </head>
 <body>
@@ -23,8 +24,24 @@
             </tbody>
         </table>
 
-        <h2>Most popular times</h2>
+        <h2>Most Popular Times</h2>
         <canvas id="clock-canvas" width="420" height="420"></canvas>
+
+        <h2>Top 10 Numbers 1 to 10</h2>
+        <table id="top-ten-numbers" class="standard-table">
+            <thead>
+                <tr>
+                    <th title="The position of the emoji based on how many times it was picked">Rank</th>
+                    <th title="The emoji itself">Emoji</th>
+                    <th title="How many times this emoji was picked">Picked</th>
+                    <th title="How many times this emoji was shown">Shown</th>
+                    <th title="Percentage of times picked when shown">Pick %</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="5" class="loading">Loading...</td></tr>
+            </tbody>
+        </table>
     </div>
     <script type="module" src="stats.js"></script>
 </body>

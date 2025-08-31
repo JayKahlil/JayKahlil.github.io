@@ -7,13 +7,14 @@ function renderLeaderboard(data) {
         item.shown = typeof item.shown === 'number' ? item.shown : 0;
         item.pickPercent = item.shown > 0 ? (item.picked / item.shown) * 100 : 0;
     });
-    data.sort((a, b) => b.picked - a.picked);
+    data.sort((a, b) => b.picked - a.picked || b.pickPercent - a.pickPercent);
     let rows = [];
     let lastPicked = null;
+    let lastPickPercent = null;
     let rank = 1;
     let skip = 0;
     data.forEach((item, i) => {
-        if (lastPicked === null || item.picked !== lastPicked) {
+        if (lastPicked === null || item.picked !== lastPicked || item.pickPercent !== lastPickPercent) {
             rank = i + 1;
             skip = 0;
         } else {
@@ -29,6 +30,7 @@ function renderLeaderboard(data) {
             </tr>
         `);
         lastPicked = item.picked;
+        lastPickPercent = item.pickPercent;
     });
     leaderboardTable.innerHTML = rows.join('') || '<tr><td colspan="5" class="loading">No data found.</td></tr>';
 }
