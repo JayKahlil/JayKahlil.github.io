@@ -365,6 +365,8 @@ document.body.onkeyup = function (e) {
 }
 
 function makeNews() {
+    document.getElementById("image-container").style.display = "none";
+    document.getElementById("loader").style.display = "inherit";
     var headline = generateHeadline();
 
     document.getElementById("headline").textContent = headline;
