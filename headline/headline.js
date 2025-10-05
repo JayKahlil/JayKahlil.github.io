@@ -364,9 +364,6 @@ document.body.onkeyup = function (e) {
     }
 }
 
-// Run makeNews when the page loads
-window.onload = makeNews;
-
 function makeNews() {
     var headline = generateHeadline();
 
@@ -443,3 +440,8 @@ function stripHtml(html) {
     var doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || "";
 }
+
+// Run makeNews when the page loads
+window.onload = makeNews;
+document.getElementById("image-container").style.display = "none";
+document.getElementById("loader").style.display = "inherit";
