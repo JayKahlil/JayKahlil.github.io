@@ -1,0 +1,209 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="/" class="logo">
+            <img src="/image/JKH-logo-transparent.png" alt="JKH Logo" class="logo-img">
+        </a>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="/films/graph/">Film Graph</a></li>
+            <li><a href="/films/degrees-of-separation/">Degrees of Separation</a></li>
+            <li><a href="http://jayhussaini.com/headline/">Jay News</a></li>
+            <li><a href="/pm/">PM</a></li>
+            <li><a href="http://jayhussaini.com/holt">Soundboard</a></li>
+            <li><a href="http://jayhussaini.com/mystery">Mystery</a></li>
+        </ul>
+    </div>
+</nav>
+
+<style>
+    .navbar {
+        background-color: rgba(35, 35, 35, 0.95);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .navbar-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 6px 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .logo {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-img {
+        height: 28px;
+        width: auto;
+        transition: transform 0.3s ease;
+    }
+
+    .logo:hover .logo-img {
+        transform: scale(1.1);
+    }
+
+    .nav-links {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .navbar a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        transition: all 0.3s ease;
+        padding: 4px 0;
+        position: relative;
+    }
+
+    .navbar .nav-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #F4B746;
+        transition: all 0.3s ease;
+    }
+
+    .navbar .nav-links a:hover {
+        color: #F4B746;
+    }
+
+    .navbar .nav-links a:hover::after {
+        width: 100%;
+        background-color: #F4B746;
+    }
+
+    .navbar .nav-links a.active {
+        color: #EC67AF;
+    }
+
+    .navbar .nav-links a.active::after {
+        width: 100%;
+        background-color: #EC67AF;
+    }
+
+    /* Don't show hover effects on active links */
+    .navbar .nav-links a.active:hover {
+        color: #EC67AF;
+    }
+
+    .navbar .nav-links a.active:hover::after {
+        background-color: #EC67AF;
+    }
+
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 21px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 100;
+    }
+
+    .hamburger span {
+        width: 100%;
+        height: 2px;
+        background-color: #ffffff;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+    }
+
+    .hamburger:hover span {
+        background-color: #F4B746;
+    }
+    
+    .hamburger.active span {
+        background-color: #EC67AF;
+    }
+
+    /* Add space for the navbar on any page that includes it */
+    body {
+        padding-top: 48px !important;
+    }
+
+    @media (max-width: 768px) {
+        .hamburger {
+            display: flex;
+        }
+
+        .nav-links {
+            display: none;
+            width: 100%;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgba(35, 35, 35, 0.98);
+            padding: 1.5rem;
+            flex-direction: column;
+            gap: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links.active {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .logo-img {
+            height: 35px;
+        }
+
+        .navbar .nav-links a::after {
+            display: none;
+        }
+
+        .navbar .nav-links a {
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        .navbar .nav-links a:hover {
+            background-color: rgba(244, 183, 70, 0.1);
+        }
+
+        .navbar .nav-links a.active {
+            background-color: rgba(236, 103, 175, 0.1);
+        }
+
+        .navbar .nav-links a.active:hover {
+            background-color: rgba(236, 103, 175, 0.15);
+        }
+    }
+</style>
+

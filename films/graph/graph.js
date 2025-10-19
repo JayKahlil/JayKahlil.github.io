@@ -34,10 +34,6 @@ function zoomed(event) {
 }
 
 // Declare the chart dimensions and margins.
-const marginTop = 20;
-const marginRight = 20;
-const marginBottom = 30;
-const marginLeft = 40;
 const lbOrange = "#ee8732";
 const lbGreen = "#66dd66";
 const lbBlue = "#65baef";
@@ -105,6 +101,7 @@ function runSimulation(graph) {
         .append("text")
         .text(d => d.count)
         .attr("font-size", "10px")
+        .attr("font-family", "sans-serif")
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
         .attr("fill", "white");
@@ -118,6 +115,7 @@ function runSimulation(graph) {
         .append("text")
         .text(d => d.name)
         .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
         .attr("dx", 15)
         .attr("dy", 4)
         .attr("fill", "white");
@@ -190,6 +188,25 @@ function parseLetterboxdDiary(diary_csv) {
 
     return { nodes: nodes, links: links };
 }
+
+// Set up file input handling
+document.getElementById('upload-button').addEventListener('click', () => {
+    document.getElementById('csv-upload').click();
+});
+
+document.getElementById('csv-upload').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const data = e.target.result;
+            const diaryGraph = parseLetterboxdDiary(data);
+            runSimulation(diaryGraph);
+            document.getElementById('diary-label').textContent = "Your Custom Letterboxd Diary";
+        };
+        reader.readAsText(file);
+    }
+});
 
 fetch("diary.csv").then(response => response.text()).then(data => {
     var diaryGraph = parseLetterboxdDiary(data);

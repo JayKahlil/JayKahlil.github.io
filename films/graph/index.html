@@ -4,10 +4,13 @@
     <meta charset="UTF-8" />
     <title>Letterboxd Diary Graph</title>
     <script src="graph.js" type="module"></script>
+    <script type="module">
+        import { loadNav } from '/nav/nav.js';
+        loadNav('/films/graph');
+    </script>
     <style>
         body {
             margin: 0;
-            padding: 0;
             overflow: hidden;
         }
         #graph-svg {
@@ -20,9 +23,21 @@
         #graph-svg:active {
             cursor: grabbing;
         }
+        #diary-label {
+            font-family: Arial, sans-serif;
+            color: #616161;
+            font-size: 12px;
+            margin-top: 8px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
+    <div style="position: absolute; top: 68px; left: 20px;">
+        <input type="file" id="csv-upload" accept=".csv" style="display: none;">
+        <button id="upload-button" style="padding: 10px; background: #ee8732; color: white; border: none; border-radius: 5px; cursor: pointer;">Upload Custom Diary CSV</button>
+        <div id="diary-label">Jay's Letterboxd Diary</div>
+    </div>
     <svg id="graph-svg"></svg>
 </body>
 </html>
