@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Letterboxd Diary Graph</title>
+    <script src="graph.js" type="module"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #graph-svg {
+            background-color: rgb(45, 45, 45);
+            cursor: grab;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+        #graph-svg:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+    <svg id="graph-svg"></svg>
+</body>
+</html>
