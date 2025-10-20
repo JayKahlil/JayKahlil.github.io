@@ -12,6 +12,7 @@
         body {
             margin: 0;
             overflow: hidden;
+            font-family: Arial, sans-serif;
         }
         #graph-svg {
             background-color: rgb(45, 45, 45);
@@ -30,13 +31,67 @@
             margin-top: 8px;
             text-align: left;
         }
+        #letterboxd-profile-link {
+            color: #616161;
+            text-decoration: none;
+        }
+        #upload-button {
+            padding: 10px;
+            background: #ee8732;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #graph-choices {
+            margin-left: 10px;
+            display: flex;
+        }
+        #graph-controls {
+            position: absolute;
+            top: 68px;
+            left: 20px;
+        }
+        .graph-choice input[type=radio] {
+            display: none;
+        }
+        .graph-choice label {
+            display: block;
+            padding: 10px;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+            transition : all .4s 0s ease;
+        }
+        .graph-choice input[id="diary-choice"]:checked + label {
+            background-color: #66dd66;
+            color: #000;
+            border-radius: 50px;
+        }
+        .graph-choice input[id="release-choice"]:checked + label {
+            background-color: #65baef;
+            color: #000;
+            border-radius: 50px;
+        }
     </style>
 </head>
 <body>
-    <div style="position: absolute; top: 68px; left: 20px;">
-        <input type="file" id="csv-upload" accept=".csv" style="display: none;">
-        <button id="upload-button" style="padding: 10px; background: #ee8732; color: white; border: none; border-radius: 5px; cursor: pointer;">Upload Custom Diary CSV</button>
-        <div id="diary-label">Jay's Letterboxd Diary</div>
+    <div id="graph-controls">
+        <div style="display: flex;">
+            <input type="file" id="csv-upload" accept=".csv" style="display: none;">
+            <button id="upload-button">Upload Custom CSV</button>
+            <div id="graph-choices">
+                <div class="graph-choice">
+                    <input type="radio" id="diary-choice" name="graph-type" value="diary" checked>
+                    <label for="diary-choice">Diary Graph</label>
+                </div>
+                <div class="graph-choice">
+                    <input type="radio" id="release-choice" name="graph-type" value="release">
+                    <label for="release-choice">Release Year Graph</label>
+                </div>
+            </div>
+        </div>
+        <div id="diary-label"><a id="letterboxd-profile-link" href="https://letterboxd.com/Kahlil/">Jay's Letterboxd History</a></div>
     </div>
     <svg id="graph-svg"></svg>
 </body>

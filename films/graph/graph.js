@@ -39,7 +39,7 @@ const lbGreen = "#66dd66";
 const lbBlue = "#65baef";
 
 // Define global variables for the visualization
-var simulation, link, node, labels, countLabels;
+var simulation, link, node, labels, countLabels, yearLabels, graphType;
 
 var sampleGraph = {
     nodes: [
@@ -60,7 +60,8 @@ function runSimulation(graph) {
     g.selectAll("*").remove();
 
     simulation = d3.forceSimulation(graph.nodes)
-        .force("link", d3.forceLink(graph.links).id(d => d.name).distance(100))
+        .force("link", d3.forceLink(graph.links).id(d => d.name).distance(200))
+        .force("collide", d3.forceCollide(30))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("center", d3.forceCenter(width / 2, height / 2))
         .on("tick", ticked);
@@ -80,7 +81,10 @@ function runSimulation(graph) {
         .data(graph.nodes)
         .enter()
         .append("circle")
-        .attr("r", 10)
+        .attr("r", function (d) {
+            if (d.type === "year") return 20;
+            else return 10;
+        })
         .attr("fill", function (d) {
             if (d.type === "year") return lbBlue;
             else if (d.count > 1) return lbOrange;
@@ -106,11 +110,25 @@ function runSimulation(graph) {
         .attr("dominant-baseline", "middle")
         .attr("fill", "white");
 
+    // Add year labels inside nodes
+    yearLabels = g
+        .append("g")
+        .selectAll("text")
+        .data(graph.nodes.filter(d => d.type === "year"))
+        .enter()
+        .append("text")
+        .text(d => d.label)
+        .attr("font-size", "15px")
+        .attr("font-family", "sans-serif")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "white");
+
     // Add name labels
     labels = g
         .append("g")
         .selectAll("text")
-        .data(graph.nodes)
+        .data(graph.nodes.filter(d => d.type === "film"))
         .enter()
         .append("text")
         .text(d => d.name)
@@ -156,13 +174,18 @@ function ticked() {
         .attr("x", d => d.x)
         .attr("y", d => d.y);
 
+    yearLabels
+        .attr("x", d => d.x)
+        .attr("y", d => d.y);
+
     labels
         .attr("x", d => d.x)
         .attr("y", d => d.y);
 }
 
-function parseLetterboxdDiary(diary_csv) {
-    const parsed = csv.parse(diary_csv)
+function parseLetterboxdCsv(csv_file, type) {
+    const parsed = csv.parse(csv_file)
+    const date_index = type === 'diary' ? 7 : 2;
 
     var links = [];
     var filmNodes = {};
@@ -171,8 +194,8 @@ function parseLetterboxdDiary(diary_csv) {
     parsed.shift(); // Remove header row
 
     parsed.forEach(row => {
-        var year = row[7].substring(0, 4);
-        links.push({ source: year, target: row[1] });
+        var year = row[date_index].substring(0, 4);
+        links.push({ source: `year-${year}`, target: row[1] });
         filmNodes[row[1]] = (filmNodes[row[1]] || 0) + 1;
         yearNodes.add(year);
     });
@@ -182,7 +205,8 @@ function parseLetterboxdDiary(diary_csv) {
         type: "film",
         count: value
     })).concat(Array.from(yearNodes).map(year => ({
-        name: year,
+        name: `year-${year}`,
+        label: year,
         type: "year"
     })));
 
@@ -200,15 +224,30 @@ document.getElementById('csv-upload').addEventListener('change', (event) => {
         const reader = new FileReader();
         reader.onload = (e) => {
             const data = e.target.result;
-            const diaryGraph = parseLetterboxdDiary(data);
-            runSimulation(diaryGraph);
-            document.getElementById('diary-label').textContent = "Your Custom Letterboxd Diary";
+            const graphData = parseLetterboxdCsv(data, graphType);
+            runSimulation(graphData);
+            document.getElementById('diary-label').textContent = "Your Custom Letterboxd History";
         };
         reader.readAsText(file);
     }
 });
 
-fetch("diary.csv").then(response => response.text()).then(data => {
-    var diaryGraph = parseLetterboxdDiary(data);
-    runSimulation(diaryGraph);
+document.querySelectorAll('input[name="graph-type"]').forEach((elem) => {
+    if (elem.checked) {
+        graphType = elem.value;
+    }
+    elem.addEventListener("change", function(event) {
+        graphType = event.target.value;
+        loadJaysGraph(graphType);
+    });
 });
+
+function loadJaysGraph(type) {
+    var path = type === 'diary' ? 'diary.csv' : 'watched.csv';
+    fetch(path).then(response => response.text()).then(data => {
+        var graphData = parseLetterboxdCsv(data, type);
+        runSimulation(graphData);
+    });
+}
+
+loadJaysGraph('diary');
