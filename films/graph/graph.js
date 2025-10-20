@@ -247,6 +247,7 @@ function loadJaysGraph(type) {
     fetch(path).then(response => response.text()).then(data => {
         var graphData = parseLetterboxdCsv(data, type);
         runSimulation(graphData);
+        document.getElementById('diary-label').innerHTML = `<a id="letterboxd-profile-link" href="https://letterboxd.com/Kahlil/">Jay's Letterboxd History</a>`;
     });
 }
 
