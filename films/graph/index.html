@@ -31,7 +31,7 @@
             margin-top: 8px;
             text-align: left;
         }
-        #letterboxd-profile-link {
+        #letterboxd-profile-link, .info-container a {
             color: #616161;
             text-decoration: none;
         }
@@ -73,6 +73,49 @@
             color: #000;
             border-radius: 50px;
         }
+        .info-container {
+            position: relative;
+            display: inline-block;
+            margin-left: 10px;
+            color: #9d9d9d;
+        }
+        .info-container span {
+            font-size: 18px;
+            user-select: none;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .info-container div {
+            display: none;
+            position: absolute;
+            top: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333333c6;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+            z-index: 1;
+        }
+        .info-container span:hover + div {
+            display: block;
+        }
+        .info-container h1 {
+            font-size: 16px;
+            margin: 10px 0 5px 0;
+            text-align: left;
+            text-decoration: underline;
+        }
+        .info-container p, .info-container ul {
+            font-size: 12px;
+            margin: 5px 0;
+            text-align: left;
+            color: #c6c6c6
+        }
     </style>
 </head>
 <body>
@@ -88,6 +131,23 @@
                 <div class="graph-choice">
                     <input type="radio" id="release-choice" name="graph-type" value="release">
                     <label for="release-choice">Release Year Graph</label>
+                </div>
+            </div>
+            <div class="info-container">
+                <span label="What is all this?">ⓘ</span>
+                <div>
+                    <h1>Diary Graph</h1>
+                    <p>This graph visualizes Letterboxd diary entries, connecting films based on the years in which they were watched.</p>
+
+                    <h1>Release Year Graph</h1>
+                    <p>This graph visualizes Letterboxd 'watched' films based on their release years.
+
+                    <h1>Viewing your own data</h1>
+                    <p>Export your letterboxd data <a href="https://letterboxd.com/settings/data/">here</a> and then upload the relevant file:</p>
+                    <ul>
+                        <li><strong>Diary Graph:</strong> Upload your <code>diary.csv</code> file.</li>
+                        <li><strong>Release Year Graph:</strong> Upload your <code>watched.csv</code> file.</li>
+                    </ul>
                 </div>
             </div>
         </div>
