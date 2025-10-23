@@ -116,7 +116,7 @@ window.addEventListener('resize', function () {
 
 svg.call(d3.zoom()
     .extent([[0, 0], [width, height]])
-    .scaleExtent([0.1, 4]) // Min and max zoom scale
+    .scaleExtent([0.05, 4]) // Min and max zoom scale
     .on("zoom", zoomed));
 
 function zoomed(event) {
@@ -215,8 +215,14 @@ function runStarSimulation(graph) {
     g.selectAll("*").remove();
 
     simulation = d3.forceSimulation(graph.nodes)
-        .force("link", d3.forceLink(graph.links).id(d => d.name).distance(200))
-        .force("collide", d3.forceCollide(30))
+        .force("link", d3.forceLink(graph.links)
+            .id(d => d.name)
+            .distance(d => {
+                var rating = d.source.name === "rating-" ? 7 : parseFloat(d.source.name.substring(7)); // Remove 'rating-' prefix
+                return ((rating + 4) ** 3) * (d.target.count);
+            })
+        )
+        // .force("collide", d3.forceCollide(50))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("center", d3.forceCenter(width / 2, height / 2))
         .on("tick", ticked);
@@ -244,8 +250,8 @@ function runStarSimulation(graph) {
         })
         .attr("r", function (d) {
             if (d.type === "rating") {
-                var rating = d.label === "" ? 6 : parseFloat(d.label);
-                return rating * 30;
+                var rating = d.label === "" ? 7 : parseFloat(d.label);
+                return (rating + 2) ** 3;
             }
             else return 8;
         })
@@ -264,24 +270,11 @@ function runStarSimulation(graph) {
         .attr("stroke-dasharray", function (d) {
             if (d.type === "rating" && d.label === "") return "8 14 5 70 17 54 3 20 10 7 5 30";
         })
-        .attr("r", function (d) {
-            if (d.type === "rating") {
-                var rating = d.label === "" ? 6 : parseFloat(d.label);
-                return rating * 20;
-            }
-            else return 8;
-        })
         .call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended));
 
-    // document.getElementById('black-hole').enter()
-    //     .append("circle")
-    //     .attr("r", 1000)
-    //     .attr("fill", "#dc5959ff")
-    //     .attr("stroke", "#b78e4cff")
-    //     .attr("stroke-dasharray", "4 20 5 7 17 54");
 
 
     // Add count labels inside nodes
@@ -306,14 +299,14 @@ function runStarSimulation(graph) {
         .enter()
         .append("text")
         .text(d => d.label === "" ? "No Rating" : d.label + "★")
-        .attr("font-size", function (d) {
-            if (d.label === "") return "20px";
-            else return (d.label * 12) + "px";
-        })
+        .attr("font-size", d => {
+            var rating = d.label === "" ? 4 : parseFloat(d.label);
+            return ((rating + 2) ** 2.7) + "px";
+        }) 
         .attr("font-family", "sans-serif")
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
-        .attr("fill", d => d.label === "" ? "white" : "#b2970099");
+        .attr("fill", d => d.label === "" ? "white" : "url('#goldGradient')");
 
     // Add name labels
     labels = g
