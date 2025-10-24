@@ -179,7 +179,11 @@ function runSimulation(graph) {
         .attr("font-family", "sans-serif")
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
-        .attr("fill", "white");
+        .attr("fill", "white")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
 
     // Add year labels inside nodes
     yearLabels = g
@@ -193,7 +197,11 @@ function runSimulation(graph) {
         .attr("font-family", "sans-serif")
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
-        .attr("fill", "white");
+        .attr("fill", "white")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
 
     // Add name labels
     labels = g
@@ -289,7 +297,11 @@ function runStarSimulation(graph) {
         .attr("font-family", "sans-serif")
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
-        .attr("fill", "white");
+        .attr("fill", "white")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
 
     // Add year labels inside nodes
     ratingLabels = g
@@ -306,7 +318,11 @@ function runStarSimulation(graph) {
         .attr("font-family", "sans-serif")
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
-        .attr("fill", d => d.label === "" ? "white" : "url('#goldGradient')");
+        .attr("fill", d => d.label === "" ? "white" : "url('#goldGradient')")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
 
     // Add name labels
     labels = g
