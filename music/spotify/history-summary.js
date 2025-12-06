@@ -161,6 +161,8 @@ function render_stats(plays, year=0) {
     const play_time_minutes = ms_to_minutes(play_time_ms);
     const play_time = ms_to_time(play_time_ms);
 
+    const plays_by_date = Object.entries(plays).sort((a, b) => new Date(a[1]['ts']) - new Date(b[1]['ts']));
+
     let section = document.createElement('section');
     section.id = `panel-${year}`;
     section.className = 'panel';
@@ -171,8 +173,9 @@ function render_stats(plays, year=0) {
         <div class="card">
             <p class="small">Unique Tracks: ${Object.keys(unique_tracks).length}</p>
             <p class="small">Unique Artists: ${Object.keys(unique_artists).length}</p>
+            <p class="small">Total Plays: ${plays.length}</p>
             <p class="small">Total Play Time: ${play_time} (${play_time_minutes.toFixed(0)} minutes)</p>
-            <div class="top-n-row">
+            <div id="top-n-lists-${year}" class="top-n-row">
               <div id="top-tracks-${year}" class="top-n">
               </div>
               <div id="top-artists-${year}" class="top-n">
@@ -180,6 +183,20 @@ function render_stats(plays, year=0) {
             </div>
         </div>
     `;
+    if (year !== 0) {
+        let topNListsDiv = section.querySelector(`#top-n-lists-${year}`);
+
+        let firstPlayP = document.createElement('p');
+        firstPlayP.className = 'small';
+        firstPlayP.innerHTML = `First Play: <a class="track-link" href="${plays_by_date[0][1][track_uri_key]}">▶ ${plays_by_date[0][1][track_key]} - ${plays_by_date[0][1][artist_key]}</a> - ${new Date(plays_by_date[0][1]['ts'])}`;
+        topNListsDiv.before(firstPlayP);
+
+        let lastPlayP = document.createElement('p');
+        lastPlayP.className = 'small';
+        lastPlayP.innerHTML = `Last Play: <a class="track-link" href="${plays_by_date[plays_by_date.length - 1][1][track_uri_key]}">▶ ${plays_by_date[plays_by_date.length - 1][1][track_key]} - ${plays_by_date[plays_by_date.length - 1][1][artist_key]}</a> - ${new Date(plays_by_date[plays_by_date.length - 1][1]['ts'])}`;
+        topNListsDiv.before(lastPlayP);
+    }
+
     let topTracksDiv = section.querySelector(`#top-tracks-${year}`);;
     topTracksDiv.innerHTML = '<p class="small"><strong>Top Tracks:</strong></p>';
     top_tracks.forEach((item, index) => {
@@ -242,7 +259,7 @@ function render_fun_stats(result) {
     section.setAttribute('aria-hidden', 'true');
     section.innerHTML = `
         <div class="card">
-            <p class="small">First Ever Song: <a class="play link" href="${first[track_uri_key]}">▶ ${first[track_key]} - ${first[artist_key]}</a> - ${new Date(first['ts'])}</p>
+            <p class="small">First Ever Song: <a class="track-link" href="${first[track_uri_key]}">▶ ${first[track_key]} - ${first[artist_key]}</a> - ${new Date(first['ts'])}</p>
             <p class="small">On shuffle <span class="accent">${shuffle_percent}%</span> of the time</p>
             <div class="top-n-row">
               <div id="top-skipped" class="top-n"></div>
@@ -255,7 +272,7 @@ function render_fun_stats(result) {
     let topSkippedDiv = section.querySelector(`#top-skipped`)
     topSkippedDiv.innerHTML = '<p class="small"><strong>Most Skipped Songs:</strong></p>';
     sorted_skips.forEach((item, index) => {
-        topSkippedDiv.innerHTML += `<p class="small">${index + 1}. <a class="play-link" href="${item[0]}">▶ ${item[1]['track']} - ${item[1]['artist']}</a> - ${item[1]['count']} skips</p>`;
+        topSkippedDiv.innerHTML += `<p class="small">${index + 1}. <a class="track-link" href="${item[0]}">▶ ${item[1]['track']} - ${item[1]['artist']}</a> - ${item[1]['count']} skips</p>`;
     });
 
     const sorted_countries = Object.entries(result.countries).sort((a, b) => b[1] - a[1]).slice(0, top_n);
