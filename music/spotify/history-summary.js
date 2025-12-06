@@ -1,28 +1,52 @@
 const artist_key = 'master_metadata_album_artist_name';
 const track_key = 'master_metadata_track_name';
+const track_uri_key = 'spotify_track_uri';
 
 let top_n = 5;
 let previous_year = null;
 let last_result = null;
+
+const regionNamesInEnglish = new Intl.DisplayNames(["en"], { type: "region" });
 
 // Read all plays from a directory handle (native picker) or an array/FileList of File objects (fallback)
 async function get_all_plays(files) {
     const plays = [];
     const plays_by_year = {};
     const fileArray = Array.from(files || []);
+    const skip_counts = {};
+    let shuffle_count = 0;
+    const countries = {};
 
     await Promise.all(fileArray.map(async (file) => {
         try {
             const text = await file.text();
             const current_file_plays = JSON.parse(text);
             current_file_plays.forEach(play => {
-                if (play['spotify_track_uri']) {
+                if (play[track_uri_key]) {
                     plays.push(play);
                     const year = new Date(play['ts']).getFullYear();
                     if (!(year in plays_by_year)) {
                         plays_by_year[year] = [];
                     }
                     plays_by_year[year].push(play);
+                    
+                    if (play['skipped']) {
+                        track_uri = play[track_uri_key];
+                        if (!(track_uri in skip_counts)) {
+                            skip_counts[track_uri] = {track: play[track_key], artist: play[artist_key], count: 0};
+                        }
+                        skip_counts[track_uri]['count'] += 1;
+                    }
+
+                    if (play['shuffle']) {
+                        shuffle_count += 1;
+                    }
+
+                    conn_country = play['conn_country'];
+                    if (!(conn_country in countries)) {
+                        countries[conn_country] = 1;
+                    }
+                    countries[conn_country] += 1;
                 }
             });
         } catch (err) {
@@ -30,7 +54,7 @@ async function get_all_plays(files) {
         }
     }));
 
-    return {plays, plays_by_year};
+    return {plays, plays_by_year, skip_counts, shuffle_count, countries};
 }
 
 function ms_to_minutes(ms) {
@@ -47,13 +71,28 @@ function get_play_time(plays) {
     return ms;
 }
 
-function get_unique_plays(plays, key) {
+function get_unique_tracks(plays) {
     const unique = {};
 
     plays.forEach(play => {
-        const value = play[key];
+        const value = play[track_uri_key];
         if (!(value in unique)) {
-            unique[value] = {plays: 0, ms: 0, artist: play[artist_key], uri: play['spotify_track_uri']};
+            unique[value] = {plays: 0, ms: 0, artist: play[artist_key], track: play[track_key]};
+        }
+        unique[value]['plays'] += 1;
+        unique[value]['ms'] += play.ms_played || 0;
+    });
+
+    return unique;
+}
+
+function get_unique_artists(plays) {
+    const unique = {};
+
+    plays.forEach(play => {
+        const value = play[artist_key];
+        if (!(value in unique)) {
+            unique[value] = {plays: 0, ms: 0};
         }
         unique[value]['plays'] += 1;
         unique[value]['ms'] += play.ms_played || 0;
@@ -112,8 +151,8 @@ function render_stats(plays, year=0) {
     // top artists (with plays and time)
     // top tracks (with plays and time)
 
-    const unique_tracks = get_unique_plays(plays, track_key);
-    const unique_artists = get_unique_plays(plays, artist_key);
+    const unique_tracks = get_unique_tracks(plays);
+    const unique_artists = get_unique_artists(plays);
 
     const top_tracks = get_top_n_by_plays(unique_tracks, top_n);
     const top_artists = get_top_n_by_plays(unique_artists, top_n);
@@ -144,12 +183,12 @@ function render_stats(plays, year=0) {
     let topTracksDiv = section.querySelector(`#top-tracks-${year}`);;
     topTracksDiv.innerHTML = '<p class="small"><strong>Top Tracks:</strong></p>';
     top_tracks.forEach((item, index) => {
-        topTracksDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. <a class="track-link" href="${item[1]['uri']}">▶ ${item[0]}</a> - <span class="plays">${item[1]['plays']} plays</span> - <span class="time">${ms_to_time(item[1]['ms'])}</span></p>`;
+        topTracksDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. <a class="track-link" href="${item[0]}">▶ ${item[1]['track']}</a> - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
     let topArtistsDiv = section.querySelector(`#top-artists-${year}`);
     topArtistsDiv.innerHTML = '<p class="small"><strong>Top Artists:</strong></p>';
     top_artists.forEach((item, index) => {
-        topArtistsDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="plays">${item[1]['plays']} plays</span> - <span class="time">${ms_to_time(item[1]['ms'])}</span></p>`;
+        topArtistsDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
 
     let button = document.createElement('button');
@@ -174,6 +213,71 @@ function render_stats(plays, year=0) {
     previous_year = year;
 }
 
+function render_fun_stats(result) {
+    // First track played
+    // most skipped track
+    // plays in country
+    // % of time on shuffle
+
+    //Remove existing fun stats panel and tab if they exist
+    const existingFunStatsPanel = document.getElementById('panel-fun-stats');
+    if (existingFunStatsPanel) {
+        existingFunStatsPanel.remove();
+    }
+    const existingFunStatsTab = document.getElementById('tab-fun-stats');
+    if (existingFunStatsTab) {
+        existingFunStatsTab.remove();
+    }
+
+    const plays_by_date = Object.entries(result.plays).sort((a, b) => new Date(a[1]['ts']) - new Date(b[1]['ts']));
+
+    const first = plays_by_date[0][1];
+    const shuffle_percent = (result.shuffle_count / result.plays.length * 100).toFixed(0);
+
+    let section = document.createElement('section');
+    section.id = `panel-fun-stats`;
+    section.className = 'panel';
+    section.setAttribute('aria-labelledby', `tab-fun-stats`);
+    section.setAttribute('role', 'tabpanel');
+    section.setAttribute('aria-hidden', 'true');
+    section.innerHTML = `
+        <div class="card">
+            <p class="small">First Ever Song: <a class="play link" href="${first[track_uri_key]}">▶ ${first[track_key]} - ${first[artist_key]}</a> - ${new Date(first['ts'])}</p>
+            <p class="small">On shuffle <span class="accent">${shuffle_percent}%</span> of the time</p>
+            <div class="top-n-row">
+              <div id="top-skipped" class="top-n"></div>
+              <div id="top-countries" class="top-n"></div>
+            </div>
+        </div>
+    `;
+
+    const sorted_skips = Object.entries(result.skip_counts).sort((a, b) => b[1]['count'] - a[1]['count']).slice(0, top_n);
+    let topSkippedDiv = section.querySelector(`#top-skipped`)
+    topSkippedDiv.innerHTML = '<p class="small"><strong>Most Skipped Songs:</strong></p>';
+    sorted_skips.forEach((item, index) => {
+        topSkippedDiv.innerHTML += `<p class="small">${index + 1}. <a class="play-link" href="${item[0]}">▶ ${item[1]['track']} - ${item[1]['artist']}</a> - ${item[1]['count']} skips</p>`;
+    });
+
+    const sorted_countries = Object.entries(result.countries).sort((a, b) => b[1] - a[1]).slice(0, top_n);
+    let topCountriesDiv = section.querySelector(`#top-countries`)
+    topCountriesDiv.innerHTML = '<p class="small"><strong>Top Countries Listened From:</strong></p>';
+    sorted_countries.forEach((item, index) => {
+        topCountriesDiv.innerHTML += `<p class="small">${index + 1}. <span class="accent">${regionNamesInEnglish.of(item[0])}</span> - <span class="muted">${item[1]} listens</span></p>`;
+    });
+
+    document.getElementById('panel-upload').after(section);
+
+    let button = document.createElement('button');
+    button.className = 'tab';
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-selected', 'false');
+    button.setAttribute('aria-controls', `panel-fun-stats`);
+    button.id = `tab-fun-stats`;
+    button.innerText = 'Stats';
+
+    document.getElementById('tab-upload').after(button);
+}
+
 function render_from_result(result) {
     // Clear previous results
     const existingPanels = document.querySelectorAll('.panel');
@@ -193,6 +297,8 @@ function render_from_result(result) {
 
     // Render overall stats
     render_stats(result.plays, 0);
+
+    render_fun_stats(result);
 
     // Render yearly stats
     const years = Object.keys(result.plays_by_year).sort();
