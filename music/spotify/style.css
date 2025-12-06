@@ -1,0 +1,49 @@
+:root{--bg:#041612;--card:#072818;--accent:#1DB954;--muted:#9fcaa3;color-scheme:dark}
+html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#031612 0%,#07251b 100%);color:#e6f6ec}
+.container{max-width:1200px;margin:48px auto;padding:24px;background:rgba(255,255,255,0.02);border-radius:12px;box-shadow:0 8px 40px rgba(2,10,6,0.6)}
+h1{margin:0 0 12px;font-size:20px}
+/* Tabs - make horizontally scrollable */
+.tabs{display:flex;gap:8px;border-bottom:1px solid rgba(255,255,255,0.04);padding-bottom:12px;margin-bottom:18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{height:8px}
+.tabs::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.35);border-radius:8px}
+.tabs::-webkit-scrollbar-track{background:transparent}
+.tab{background:transparent;border:none;padding:8px 12px;border-radius:8px;color:var(--muted);cursor:pointer;font-weight:600;white-space:nowrap;flex:0 0 auto}
+.tab:hover{background:rgba(29,185,84,0.04)}
+.tab[aria-selected="true"]{color:#ffffff;background:linear-gradient(90deg,rgba(29,185,84,0.14),rgba(29,185,84,0.06));box-shadow:inset 0 -2px 0 var(--accent);border:1px solid rgba(29,185,84,0.12)}
+.tab:focus{outline:2px solid rgba(29,185,84,0.12)}
+.panel{display:none;padding:16px 0}
+.panel[aria-hidden="false"]{display:block}
+/* Card styling - add flavour so stats stand out */
+.card{background:linear-gradient(180deg,rgba(12,38,24,0.9),rgba(4,20,16,0.9));padding:18px;border-radius:10px;position:relative;border-left:4px solid rgba(29,185,84,0.08);box-shadow:0 10px 30px rgba(3,10,6,0.6)}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 120px at 10% 10%,rgba(29,185,84,0.04),transparent 20%);pointer-events:none;border-radius:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06));color:#e6f6ec;cursor:pointer}
+.btn.secondary{background:transparent;border:1px dashed rgba(255,255,255,0.03);color:var(--muted)}
+.status{margin-top:12px;color:var(--muted);font-size:14px}
+.small{font-size:13px;color:var(--muted);margin:6px 0;padding:6px 10px;border-radius:8px}
+pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;margin:8px 0 0}
+
+/* Top n list - boxed tiles, side by side */
+/* The row holds two .top-n boxes side-by-side; each .top-n remains a vertical block */
+.top-n-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;margin-top:12px}
+.top-n-row > .top-n{flex:1 1 calc(50% - 12px);max-width:calc(50% - 12px);min-width:190px;box-sizing:border-box}
+
+/* individual top-n is a vertical list of p.small items */
+.top-n{display:block;margin:0}
+.top-n p.small:first-child{background:transparent;padding:0;margin:0 0 6px 0;color:var(--muted);font-weight:700}
+.top-n p.small{display:block;margin:6px 0;padding:6px 10px;border-radius:8px;color:#eaf9ea;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.04));border:1px solid rgba(255,255,255,0.03)}
+.top-n p.small strong{color:var(--accent)}
+
+/* make numeric bits stand out a little */
+.card p.small{display:block}
+
+/* scrollbar friendliness for firefox */
+.tabs{scrollbar-color:rgba(0,0,0,0.35) transparent}
+
+/* plays and time highlights */
+.plays{color:var(--accent);font-weight:600}
+.time{color:var(--muted);font-weight:600}
+
+/* responsive tweaks */
+@media (max-width:760px){
+  .top-n-row > .top-n{flex:1 1 100%;max-width:100%}
+}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Spotify - Big Time History</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="history-summary.js"></script>
+    <script type="module">
+        import { loadNav } from '/nav/nav.js';
+        loadNav('/music/spotify');
+    </script>
+</head>
+
+<body>
+    <div id="tab-container" class="container" role="application">
+        <h1>Spotify — Big Time History</h1>
+
+        <div class="tabs" role="tablist" aria-label="Main tabs">
+            <button class="tab" role="tab" aria-selected="true" aria-controls="panel-upload"
+                id="tab-upload">Upload</button>
+            <button class="tab" role="tab" aria-selected="false" aria-controls="panel-settings"
+                id="tab-settings">Settings</button>
+        </div>
+
+        <section id="panel-upload" class="panel" role="tabpanel" aria-labelledby="tab-upload" aria-hidden="false">
+            <div class="card">
+                <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                    <button id="upload" class="btn">Upload</button>
+                    <input type="file" id="json-upload" accept=".json" style="display: none;" multiple>
+                </div>
+            </div>
+        </section>
+
+        <section id="panel-settings" class="panel" role="tabpanel" aria-labelledby="tab-settings" aria-hidden="true">
+            <div class="card">
+                <label for="top-n-select">Number of Top Items to Display:</label>
+                <input type="number" id="top-n-select" name="top-n-select" min="1" max="1000" value="5">
+            </div>
+        </section>
+
+    </div>
+</body>
+
+</html>
