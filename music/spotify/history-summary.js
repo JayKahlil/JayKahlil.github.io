@@ -53,7 +53,7 @@ function get_unique_plays(plays, key) {
     plays.forEach(play => {
         const value = play[key];
         if (!(value in unique)) {
-            unique[value] = {plays: 0, ms: 0};
+            unique[value] = {plays: 0, ms: 0, artist: play[artist_key], uri: play['spotify_track_uri']};
         }
         unique[value]['plays'] += 1;
         unique[value]['ms'] += play.ms_played || 0;
@@ -144,7 +144,7 @@ function render_stats(plays, year=0) {
     let topTracksDiv = section.querySelector(`#top-tracks-${year}`);;
     topTracksDiv.innerHTML = '<p class="small"><strong>Top Tracks:</strong></p>';
     top_tracks.forEach((item, index) => {
-        topTracksDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="plays">${item[1]['plays']} plays</span> - <span class="time">${ms_to_time(item[1]['ms'])}</span></p>`;
+        topTracksDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. <a class="track-link" href="${item[1]['uri']}">▶ ${item[0]}</a> - <span class="plays">${item[1]['plays']} plays</span> - <span class="time">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
     let topArtistsDiv = section.querySelector(`#top-artists-${year}`);
     topArtistsDiv.innerHTML = '<p class="small"><strong>Top Artists:</strong></p>';
