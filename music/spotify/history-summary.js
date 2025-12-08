@@ -5,16 +5,19 @@ const artist_key = 'master_metadata_album_artist_name';
 const track_key = 'master_metadata_track_name';
 const track_uri_key = 'spotify_track_uri';
 const album_key = 'master_metadata_album_album_name';
+const show_key = 'episode_show_name';
+const podcast_uri_key = 'spotify_episode_uri';
 
 let top_n = 5;
 let previous_year = null;
 let last_result = null;
+let last_podcast_result = null;
 let platform_grouping_type = null;
 
 const regionNamesInEnglish = new Intl.DisplayNames(["en"], { type: "region" });
 
 // Read all plays from a directory handle (native picker) or an array/FileList of File objects (fallback)
-async function get_all_plays(files) {
+async function get_all_plays(files, play_type=track_uri_key) {
     const plays = [];
     const plays_by_year = {};
     const fileArray = Array.from(files || []);
@@ -27,7 +30,7 @@ async function get_all_plays(files) {
             const text = await file.text();
             const current_file_plays = JSON.parse(text);
             current_file_plays.forEach(play => {
-                if (play[track_uri_key]) {
+                if (play[play_type]) {
                     try {
                         plays.push(play);
                         const year = new Date(play['ts']).getFullYear();
@@ -37,7 +40,7 @@ async function get_all_plays(files) {
                         plays_by_year[year].push(play);
                         
                         if (play['skipped']) {
-                            let track_uri = play[track_uri_key];
+                            let track_uri = play[play_type];
                             if (!(track_uri in skip_counts)) {
                                 skip_counts[track_uri] = {track: play[track_key], artist: play[artist_key], count: 0};
                             }
@@ -124,8 +127,45 @@ function get_unique_albums(plays) {
     return unique;
 }
 
+function get_unique_podcasts(plays) {
+    const unique = {};
+
+    plays.forEach(play => {
+        const value = play[show_key];
+        if (!(value in unique)) {
+            unique[value] = {plays: 0, ms: 0, unique_episodes: new Set()};
+        }
+        unique[value]['plays'] += 1;
+        unique[value]['ms'] += play.ms_played || 0;
+        unique[value]['unique_episodes'].add(play[podcast_uri_key]);
+    });
+
+    return unique;
+}
+
+function get_unique_podcast_episodes(plays) {
+    const unique = {};
+
+    plays.forEach(play => {
+        const value = play[podcast_uri_key];
+        if (!(value in unique)) {
+            unique[value] = {plays: 0, ms: 0, episode_name: play['episode_name']};
+        }
+        unique[value]['plays'] += 1;
+        unique[value]['ms'] += play.ms_played || 0;
+    });
+
+    return unique;
+}
+
 function get_top_n_by_plays(stats, n) {
     const sorted_stats = Object.entries(stats).sort((a, b) => b[1]['plays'] - a[1]['plays']);
+
+    return sorted_stats.slice(0, n);
+}
+
+function get_top_n_by_time(stats, n) {
+    const sorted_stats = Object.entries(stats).sort((a, b) => b[1]['ms'] - a[1]['ms']);
 
     return sorted_stats.slice(0, n);
 }
@@ -167,7 +207,7 @@ function ms_to_time(ms) {
     return parts.join(' ');
 }
 
-function render_stats(plays, year=0) {
+function render_stats(plays, podcast_plays, year=0) {
     // unique artists
     // unique tracks
     // total play time
@@ -177,14 +217,21 @@ function render_stats(plays, year=0) {
     const unique_tracks = get_unique_tracks(plays);
     const unique_artists = get_unique_artists(plays);
     const unique_albums = get_unique_albums(plays);
+    const unique_podcasts = get_unique_podcasts(podcast_plays);
+    const unique_podcast_episodes = get_unique_podcast_episodes(podcast_plays);
 
     const top_tracks = get_top_n_by_plays(unique_tracks, top_n);
     const top_artists = get_top_n_by_plays(unique_artists, top_n);
     const top_albums = get_top_n_by_plays(unique_albums, top_n);
+    const top_podcasts = get_top_n_by_time(unique_podcasts, top_n);
 
     const play_time_ms = get_play_time(plays);
     const play_time_minutes = ms_to_minutes(play_time_ms);
     const play_time = ms_to_time(play_time_ms);
+
+    const podcast_play_time_ms = get_play_time(podcast_plays);
+    const podcast_play_time_minutes = ms_to_minutes(podcast_play_time_ms);
+    const podcast_play_time = ms_to_time(podcast_play_time_ms);
 
     const plays_by_date = Object.entries(plays).sort((a, b) => new Date(a[1]['ts']) - new Date(b[1]['ts']));
 
@@ -200,12 +247,17 @@ function render_stats(plays, year=0) {
             <p class="small">Unique Artists: ${Object.keys(unique_artists).length}</p>
             <p class="small">Total Plays: ${plays.length}</p>
             <p class="small">Total Play Time: ${play_time} (${play_time_minutes.toFixed(0)} minutes)</p>
+            <p class="small">Unique Podcasts: ${Object.keys(unique_podcasts).length}</p>
+            <p class="small">Unique Podcast Episodes: ${Object.keys(unique_podcast_episodes).length}</p>
+            <p class="small">Total Podcast Play Time: ${podcast_play_time} (${podcast_play_time_minutes.toFixed(0)} minutes)</p>
             <div id="top-n-lists-${year}" class="top-n-row">
               <div id="top-tracks-${year}" class="top-n">
               </div>
               <div id="top-artists-${year}" class="top-n">
               </div>
               <div id="top-albums-${year}" class="top-n">
+              </div>
+              <div id="top-podcasts-${year}" class="top-n">
               </div>
             </div>
         </div>
@@ -238,6 +290,11 @@ function render_stats(plays, year=0) {
     topAlbumsDiv.innerHTML = '<p class="small"><strong>Top Albums:</strong></p>';
     top_albums.forEach((item, index) => {
         topAlbumsDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. ${item[1]['album']} - <span class="accent">${item[1]['plays']} track plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
+    });
+    let topPodcastsDiv = section.querySelector(`#top-podcasts-${year}`);
+    topPodcastsDiv.innerHTML = '<p class="small"><strong>Top Podcasts:</strong></p>';
+    top_podcasts.forEach((item, index) => {
+        topPodcastsDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="muted">${item[1]['plays']} plays - ${item[1]['unique_episodes'].size} episodes</span> - <span class="accent">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
 
     let button = document.createElement('button');
@@ -426,7 +483,7 @@ function render_platform_chart(plays) {
     }
 }
 
-function render_from_result(result) {
+function render_from_result(result, podcastResult) {
     // Clear previous results
     const existingPanels = document.querySelectorAll('.panel');
     existingPanels.forEach(panel => {
@@ -444,14 +501,14 @@ function render_from_result(result) {
     previous_year = null;
 
     // Render overall stats
-    render_stats(result.plays, 0);
+    render_stats(result.plays, podcastResult.plays, 0);
 
     render_fun_stats(result);
 
     // Render yearly stats
     const years = Object.keys(result.plays_by_year).sort();
     years.forEach(year => {
-        render_stats(result.plays_by_year[year], year);
+        render_stats(result.plays_by_year[year], podcastResult.plays_by_year[year] || [], year);
     });
 }
 
@@ -459,7 +516,10 @@ async function load_history(files) {
     // Use await instead of then and keep the parsed result in memory so UI can re-render without re-reading files
     const result = await get_all_plays(files);
     last_result = result;
-    render_from_result(result);
+
+    const podcastResult = await get_all_plays(files, podcast_uri_key);
+    last_podcast_result = podcastResult;
+    render_from_result(result, podcastResult);
 }
 
 function set_tab_listeners() {
@@ -516,8 +576,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isNaN(value) && value > 0) {
                 top_n = value;
                 // Re-render using the last loaded result if available, otherwise fall back to reloading from the file input
-                if (last_result) {
-                    render_from_result(last_result);
+                if (last_result && last_podcast_result) {
+                    render_from_result(last_result, last_podcast_result);
                 } else if (jsonUpload && jsonUpload.files && jsonUpload.files.length > 0) {
                     load_history(jsonUpload.files);
                 }
