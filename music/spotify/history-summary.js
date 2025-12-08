@@ -280,22 +280,22 @@ function render_stats(plays, podcast_plays, year=0) {
     let topTracksDiv = section.querySelector(`#top-tracks-${year}`);;
     topTracksDiv.innerHTML = '<p class="small"><strong>Top Tracks:</strong></p>';
     top_tracks.forEach((item, index) => {
-        topTracksDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. <a class="track-link" href="${item[0]}"><span class="play_icon">▶</span>${item[1]['track']}</a> - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
+        topTracksDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. <a class="track-link" href="${item[0]}"><span class="play_icon">▶</span>${item[1]['track']}</a> - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted" title="${ms_to_minutes(item[1]['ms']).toFixed(0)} minutes">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
     let topArtistsDiv = section.querySelector(`#top-artists-${year}`);
     topArtistsDiv.innerHTML = '<p class="small"><strong>Top Artists:</strong></p>';
     top_artists.forEach((item, index) => {
-        topArtistsDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
+        topArtistsDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted" title="${ms_to_minutes(item[1]['ms']).toFixed(0)} minutes">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
     let topAlbumsDiv = section.querySelector(`#top-albums-${year}`);
     topAlbumsDiv.innerHTML = '<p class="small"><strong>Top Albums:</strong></p>';
     top_albums.forEach((item, index) => {
-        topAlbumsDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. ${item[1]['album']} - <span class="accent">${item[1]['plays']} track plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
+        topAlbumsDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. ${item[1]['album']} - <span class="accent">${item[1]['plays']} track plays</span> - <span class="muted" title="${ms_to_minutes(item[1]['ms']).toFixed(0)} minutes">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
     let topPodcastsDiv = section.querySelector(`#top-podcasts-${year}`);
     topPodcastsDiv.innerHTML = '<p class="small"><strong>Top Podcasts:</strong></p>';
     top_podcasts.forEach((item, index) => {
-        topPodcastsDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="muted">${item[1]['plays']} plays - ${item[1]['unique_episodes'].size} episodes</span> - <span class="accent">${ms_to_time(item[1]['ms'])}</span></p>`;
+        topPodcastsDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="muted">${item[1]['plays']} plays - ${item[1]['unique_episodes'].size} episodes</span> - <span class="accent" title="${ms_to_minutes(item[1]['ms']).toFixed(0)} minutes">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
 
     let button = document.createElement('button');
