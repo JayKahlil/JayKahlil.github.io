@@ -9,6 +9,7 @@ const album_key = 'master_metadata_album_album_name';
 let top_n = 5;
 let previous_year = null;
 let last_result = null;
+let platform_grouping_type = null;
 
 const regionNamesInEnglish = new Intl.DisplayNames(["en"], { type: "region" });
 
@@ -300,7 +301,19 @@ function render_fun_stats(result) {
             <div id="map">
                 <h3 class="small">Listens by Country</h3>
             </div>
-            <div id="platform"></div>
+            <div id="platform">
+                <fieldset>
+                    <label for="platform-type-device-type">Device Type</label>
+                    <input type="radio" id="platform-type-device-type" name="platform-type" value="device-type" checked>
+
+                    <label for="platform-type-specific">Specific</label>
+                    <input type="radio" id="platform-type-specific" name="platform-type" value="specific">
+
+                    <label for="platform-type-specific-with-other">Specific (with other)</label>
+                    <input type="radio" id="platform-type-specific-with-other" name="platform-type" value="specific-with-other">
+                </fieldset>
+                <div id="platform-chart-container"></div>
+            </div>
         </div>
     `;
 
@@ -319,6 +332,8 @@ function render_fun_stats(result) {
     });
 
     document.getElementById('panel-upload').after(section);
+
+    setPlatformTypeListeners();
 
     // Render calendar heatmap into the fun stats panel (if available)
     try {
@@ -371,11 +386,33 @@ function render_fun_stats(result) {
         console.warn('Failed to render world map heatmap:', err);
     }
 
+    render_platform_chart(result.plays);
+
+    let button = document.createElement('button');
+    button.className = 'tab';
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-selected', 'false');
+    button.setAttribute('aria-controls', `panel-fun-stats`);
+    button.id = `tab-fun-stats`;
+    button.innerText = 'Stats';
+
+    document.getElementById('tab-upload').after(button);
+}
+
+function render_platform_chart(plays) {
+    // Clear previous platform chart
+    const section = document.getElementById('panel-fun-stats');
+    if (!section) return;
+    const existingContainer = section.querySelector('#platform-chart-container');
+    if (existingContainer) {
+        existingContainer.innerHTML = '';
+    }
+
     // Render platform over time chart into the fun stats panel (if available)
     try {
         if (typeof renderPlatformOverTime === 'function') {
-            const plotEl = renderPlatformOverTime(result.plays);
-            const container = section.querySelector('#platform');
+            const plotEl = renderPlatformOverTime(plays, platform_grouping_type || 'device-type');
+            const container = section.querySelector('#platform-chart-container');
             if (container) {
                 if (plotEl && plotEl.nodeType) {
                     container.appendChild(plotEl);
@@ -387,16 +424,6 @@ function render_fun_stats(result) {
     } catch (err) {
         console.warn('Failed to render platform over time chart:', err);
     }
-
-    let button = document.createElement('button');
-    button.className = 'tab';
-    button.setAttribute('role', 'tab');
-    button.setAttribute('aria-selected', 'false');
-    button.setAttribute('aria-controls', `panel-fun-stats`);
-    button.id = `tab-fun-stats`;
-    button.innerText = 'Stats';
-
-    document.getElementById('tab-upload').after(button);
 }
 
 function render_from_result(result) {
@@ -447,6 +474,22 @@ function set_tab_listeners() {
       const panel = document.getElementById(tab.getAttribute('aria-controls'));
       if (panel) panel.setAttribute('aria-hidden', 'false');
     }));
+}
+
+function setPlatformTypeListeners() {
+    const platformTypeInputs = document.getElementsByName('platform-type');
+    platformTypeInputs.forEach(input => {
+        input.addEventListener('change', (event) => {
+            console.log('Platform grouping type changed to', event.target.value);
+            platform_grouping_type = event.target.value;
+            // Re-render using the last loaded result if available, otherwise fall back to reloading from the file input
+            if (last_result) {
+                render_platform_chart(last_result.plays);
+            } else if (jsonUpload && jsonUpload.files && jsonUpload.files.length > 0) {
+                render_platform_chart(jsonUpload.files.plays);
+            }
+        });
+    });
 }
 
 // Wait for DOM to be ready before attaching event listeners so elements exist

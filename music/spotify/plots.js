@@ -219,7 +219,7 @@ export async function renderGlobeHeatmap(plays) {
 
 let uncategorisedPlatforms = new Set();
 
-export function renderPlatformOverTime(plays) {
+export function renderPlatformOverTime(plays, platform_grouping_type) {
     // Line chart for 'platform' dataq plays over time, grouped by month
     if (!plays || plays.length === 0) {
         const empty = document.createElement('div');
@@ -233,7 +233,7 @@ export function renderPlatformOverTime(plays) {
     for (const p of plays) {
         const date = new Date(p.ts);
         const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-        const platform = groupPlatform(p.platform);
+        const platform = groupPlatform(p.platform, platform_grouping_type);
         const key = `${yearMonth}||${platform}`;
         counts[key] = (counts[key] || 0) + 1;
     }
@@ -267,7 +267,8 @@ export function renderPlatformOverTime(plays) {
             // display only the year for tick labels
             tickFormat: d => (typeof d === 'string' ? d.split('-')[0] : d),
             // tick positions: first month of each year
-            ticks: tickValues
+            ticks: tickValues,
+            label: null
         },
         y: {
             label: 'Number of Plays'
@@ -284,7 +285,11 @@ export function renderPlatformOverTime(plays) {
     return plot;
 }
 
-function groupPlatform(platform) {
+function groupPlatform(platform, platform_grouping_type) {
+    if (platform_grouping_type === 'device-type') {
+        return groupPlatformByType(platform);
+    }
+
     if (!platform) return 'Unknown';
     const p = platform.toLowerCase();
     if (p.includes('android os')) return 'Android';
@@ -301,6 +306,24 @@ function groupPlatform(platform) {
     if (p.includes('applewatch')) return 'Apple Watch';
     if (p.includes('sonos')) return 'Sonos';
     if (p.includes('echo_dot')) return 'Alexa';
+
+    if (platform_grouping_type === 'specific-with-other') {
+        return platform;
+    }
+    uncategorisedPlatforms.add(platform);
+    return "Other";
+}
+
+function groupPlatformByType(platform) {
+    if (!platform) return 'Unknown';
+    const p = platform.toLowerCase();
+
+    if (p.includes('windows phone') || p.includes('android os') || p.includes('ios') || p.includes('android-tablet os')) return 'Mobile';
+    if (p.includes('tv') || p.includes('xbox')) return 'TV';
+    if (p.includes('windows') || p.includes('os x')) return 'Desktop';
+    if (p.includes('applewatch')) return 'Smart Watch';
+    if (p.includes('sonos') || p.includes('echo_dot') || p.includes('denon') || p.includes('yamaha')) return 'Speaker/HiFi';
+
     uncategorisedPlatforms.add(platform);
     return "Other";
 }
