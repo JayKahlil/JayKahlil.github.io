@@ -245,6 +245,7 @@ function render_stats(plays, podcast_plays, year=0) {
         <div class="card">
             <p class="small">Unique Tracks: ${Object.keys(unique_tracks).length}</p>
             <p class="small">Unique Artists: ${Object.keys(unique_artists).length}</p>
+            <p class="small">Unique Albums: ${Object.keys(unique_albums).length}</p>
             <p class="small">Total Plays: ${plays.length}</p>
             <p class="small">Total Play Time: ${play_time} (${play_time_minutes.toFixed(0)} minutes)</p>
             <p class="small">Unique Podcasts: ${Object.keys(unique_podcasts).length}</p>
