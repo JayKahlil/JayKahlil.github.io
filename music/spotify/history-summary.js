@@ -1,3 +1,5 @@
+import { renderCalendarHeatmap } from './graphs.js';
+
 const artist_key = 'master_metadata_album_artist_name';
 const track_key = 'master_metadata_track_name';
 const track_uri_key = 'spotify_track_uri';
@@ -23,30 +25,34 @@ async function get_all_plays(files) {
             const current_file_plays = JSON.parse(text);
             current_file_plays.forEach(play => {
                 if (play[track_uri_key]) {
-                    plays.push(play);
-                    const year = new Date(play['ts']).getFullYear();
-                    if (!(year in plays_by_year)) {
-                        plays_by_year[year] = [];
-                    }
-                    plays_by_year[year].push(play);
-                    
-                    if (play['skipped']) {
-                        track_uri = play[track_uri_key];
-                        if (!(track_uri in skip_counts)) {
-                            skip_counts[track_uri] = {track: play[track_key], artist: play[artist_key], count: 0};
+                    try {
+                        plays.push(play);
+                        const year = new Date(play['ts']).getFullYear();
+                        if (!(year in plays_by_year)) {
+                            plays_by_year[year] = [];
                         }
-                        skip_counts[track_uri]['count'] += 1;
-                    }
+                        plays_by_year[year].push(play);
+                        
+                        if (play['skipped']) {
+                            let track_uri = play[track_uri_key];
+                            if (!(track_uri in skip_counts)) {
+                                skip_counts[track_uri] = {track: play[track_key], artist: play[artist_key], count: 0};
+                            }
+                            skip_counts[track_uri]['count'] += 1;
+                        }
 
-                    if (play['shuffle']) {
-                        shuffle_count += 1;
-                    }
+                        if (play['shuffle']) {
+                            shuffle_count += 1;
+                        }
 
-                    conn_country = play['conn_country'];
-                    if (!(conn_country in countries)) {
-                        countries[conn_country] = 1;
+                        let conn_country = play['conn_country'];
+                        if (!(conn_country in countries)) {
+                            countries[conn_country] = 1;
+                        }
+                        countries[conn_country] += 1;
+                    } catch (err) {
+                        console.warn('Failed to process play entry', play, err);
                     }
-                    countries[conn_country] += 1;
                 }
             });
         } catch (err) {
@@ -188,19 +194,19 @@ function render_stats(plays, year=0) {
 
         let firstPlayP = document.createElement('p');
         firstPlayP.className = 'small';
-        firstPlayP.innerHTML = `First Play: <a class="track-link" href="${plays_by_date[0][1][track_uri_key]}">▶ ${plays_by_date[0][1][track_key]} - ${plays_by_date[0][1][artist_key]}</a> - ${new Date(plays_by_date[0][1]['ts'])}`;
+        firstPlayP.innerHTML = `First Play: <a class="track-link" href="${plays_by_date[0][1][track_uri_key]}"><span class="play_icon">▶</span>${plays_by_date[0][1][track_key]} - ${plays_by_date[0][1][artist_key]}</a> - ${new Date(plays_by_date[0][1]['ts'])}`;
         topNListsDiv.before(firstPlayP);
 
         let lastPlayP = document.createElement('p');
         lastPlayP.className = 'small';
-        lastPlayP.innerHTML = `Last Play: <a class="track-link" href="${plays_by_date[plays_by_date.length - 1][1][track_uri_key]}">▶ ${plays_by_date[plays_by_date.length - 1][1][track_key]} - ${plays_by_date[plays_by_date.length - 1][1][artist_key]}</a> - ${new Date(plays_by_date[plays_by_date.length - 1][1]['ts'])}`;
+        lastPlayP.innerHTML = `Last Play: <a class="track-link" href="${plays_by_date[plays_by_date.length - 1][1][track_uri_key]}"><span class="play_icon">▶</span>${plays_by_date[plays_by_date.length - 1][1][track_key]} - ${plays_by_date[plays_by_date.length - 1][1][artist_key]}</a> - ${new Date(plays_by_date[plays_by_date.length - 1][1]['ts'])}`;
         topNListsDiv.before(lastPlayP);
     }
 
     let topTracksDiv = section.querySelector(`#top-tracks-${year}`);;
     topTracksDiv.innerHTML = '<p class="small"><strong>Top Tracks:</strong></p>';
     top_tracks.forEach((item, index) => {
-        topTracksDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. <a class="track-link" href="${item[0]}">▶ ${item[1]['track']}</a> - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
+        topTracksDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. <a class="track-link" href="${item[0]}"><span class="play_icon">▶</span>${item[1]['track']}</a> - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
     let topArtistsDiv = section.querySelector(`#top-artists-${year}`);
     topArtistsDiv.innerHTML = '<p class="small"><strong>Top Artists:</strong></p>';
@@ -259,12 +265,13 @@ function render_fun_stats(result) {
     section.setAttribute('aria-hidden', 'true');
     section.innerHTML = `
         <div class="card">
-            <p class="small">First Ever Song: <a class="track-link" href="${first[track_uri_key]}">▶ ${first[track_key]} - ${first[artist_key]}</a> - ${new Date(first['ts'])}</p>
+            <p class="small">First Ever Song: <a class="track-link" href="${first[track_uri_key]}"><span class="play_icon">▶</span>${first[track_key]} - ${first[artist_key]}</a> - ${new Date(first['ts'])}</p>
             <p class="small">On shuffle <span class="accent">${shuffle_percent}%</span> of the time</p>
             <div class="top-n-row">
               <div id="top-skipped" class="top-n"></div>
               <div id="top-countries" class="top-n"></div>
             </div>
+            <div id="fun-heatmap" class="heatmap" aria-hidden="false"></div>
         </div>
     `;
 
@@ -272,7 +279,7 @@ function render_fun_stats(result) {
     let topSkippedDiv = section.querySelector(`#top-skipped`)
     topSkippedDiv.innerHTML = '<p class="small"><strong>Most Skipped Songs:</strong></p>';
     sorted_skips.forEach((item, index) => {
-        topSkippedDiv.innerHTML += `<p class="small">${index + 1}. <a class="track-link" href="${item[0]}">▶ ${item[1]['track']} - ${item[1]['artist']}</a> - ${item[1]['count']} skips</p>`;
+        topSkippedDiv.innerHTML += `<p class="small">${index + 1}. <a class="track-link" href="${item[0]}"><span class="play_icon">▶</span>${item[1]['track']} - ${item[1]['artist']}</a> - ${item[1]['count']} skips</p>`;
     });
 
     const sorted_countries = Object.entries(result.countries).sort((a, b) => b[1] - a[1]).slice(0, top_n);
@@ -283,6 +290,23 @@ function render_fun_stats(result) {
     });
 
     document.getElementById('panel-upload').after(section);
+
+    // Render calendar heatmap into the fun stats panel (if available)
+    try {
+        if (typeof renderCalendarHeatmap === 'function') {
+            const plotEl = renderCalendarHeatmap(result.plays);
+            const container = section.querySelector('#fun-heatmap');
+            if (container) {
+                if (plotEl && plotEl.nodeType) {
+                    container.appendChild(plotEl);
+                } else if (plotEl && typeof plotEl.then === 'function') {
+                    plotEl.then(el => { if (el && el.nodeType) container.appendChild(el); });
+                }
+            }
+        }
+    } catch (err) {
+        console.warn('Failed to render calendar heatmap:', err);
+    }
 
     let button = document.createElement('button');
     button.className = 'tab';
