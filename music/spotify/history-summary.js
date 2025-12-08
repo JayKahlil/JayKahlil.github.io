@@ -1,4 +1,5 @@
-import { renderCalendarHeatmap } from './graphs.js';
+import { renderCalendarHeatmap } from './plots.js';
+import { renderClockChart } from './d3-charts.js';
 
 const artist_key = 'master_metadata_album_artist_name';
 const track_key = 'master_metadata_track_name';
@@ -271,7 +272,7 @@ function render_fun_stats(result) {
               <div id="top-skipped" class="top-n"></div>
               <div id="top-countries" class="top-n"></div>
             </div>
-            <div id="fun-heatmap" class="heatmap" aria-hidden="false"></div>
+            <div id="charts" class="charts-container" aria-hidden="false"></div>
         </div>
     `;
 
@@ -295,7 +296,7 @@ function render_fun_stats(result) {
     try {
         if (typeof renderCalendarHeatmap === 'function') {
             const plotEl = renderCalendarHeatmap(result.plays);
-            const container = section.querySelector('#fun-heatmap');
+            const container = section.querySelector('#charts');
             if (container) {
                 if (plotEl && plotEl.nodeType) {
                     container.appendChild(plotEl);
@@ -306,6 +307,23 @@ function render_fun_stats(result) {
         }
     } catch (err) {
         console.warn('Failed to render calendar heatmap:', err);
+    }
+
+    // Render clock chart into the fun stats panel (if available)
+    try {
+        if (typeof renderClockChart === 'function') {
+            const plotEl = renderClockChart(result.plays);
+            const container = section.querySelector('#charts');
+            if (container) {
+                if (plotEl && plotEl.nodeType) {
+                    container.appendChild(plotEl);
+                } else if (plotEl && typeof plotEl.then === 'function') {
+                    plotEl.then(el => { if (el && el.nodeType) container.appendChild(el); });
+                }
+            }
+        }
+    } catch (err) {
+        console.warn('Failed to render clock chart:', err);
     }
 
     let button = document.createElement('button');
