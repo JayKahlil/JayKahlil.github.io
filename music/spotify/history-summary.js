@@ -299,7 +299,7 @@ function render_fun_stats(result) {
             </div>
             <div id="charts" class="charts-container" aria-hidden="false"></div>
             <div id="map">
-                <h3 class="small">Listens by Country</h3>
+                <h3 class="small">Where you were when listening</h3>
             </div>
             <div id="platform">
                 <fieldset>
