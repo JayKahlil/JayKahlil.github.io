@@ -30,6 +30,9 @@ pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,0.02)
 .charts-container{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;margin-top:12px}
 .charts-container > svg{flex:1 1 calc(50% - 12px);max-width:calc(50% - 12px);min-width:190px;box-sizing:border-box}
 
+#map{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;margin-top:12px}
+#map > svg{flex:1 1 100%;max-width:100%;min-width:190px;box-sizing:border-box}
+
 /* individual top-n is a vertical list of p.small items */
 .top-n{display:block;margin:0}
 .top-n p.small:first-child{background:transparent;padding:0;margin:0 0 6px 0;color:var(--muted);font-weight:700}
@@ -103,4 +106,5 @@ label[for="top-n-select"] {
 @media (max-width:760px){
   .top-n-row > .top-n{flex:1 1 100%;max-width:100%}
   .charts-container > svg{flex:1 1 100%;max-width:100%}
+  #map > svg{flex:1 1 100%;max-width:100%}
 }

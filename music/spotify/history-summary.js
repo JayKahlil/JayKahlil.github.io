@@ -1,9 +1,10 @@
-import { renderCalendarHeatmap } from './plots.js';
+import { renderCalendarHeatmap, renderGlobeHeatmap } from './plots.js';
 import { renderClockChart } from './d3-charts.js';
 
 const artist_key = 'master_metadata_album_artist_name';
 const track_key = 'master_metadata_track_name';
 const track_uri_key = 'spotify_track_uri';
+const album_key = 'master_metadata_album_album_name';
 
 let top_n = 5;
 let previous_year = null;
@@ -47,10 +48,9 @@ async function get_all_plays(files) {
                         }
 
                         let conn_country = play['conn_country'];
-                        if (!(conn_country in countries)) {
-                            countries[conn_country] = 1;
-                        }
-                        countries[conn_country] += 1;
+                        // Normalize missing country values and increment correctly
+                        conn_country = conn_country || 'Unknown';
+                        countries[conn_country] = (countries[conn_country] || 0) + 1;
                     } catch (err) {
                         console.warn('Failed to process play entry', play, err);
                     }
@@ -100,6 +100,21 @@ function get_unique_artists(plays) {
         const value = play[artist_key];
         if (!(value in unique)) {
             unique[value] = {plays: 0, ms: 0};
+        }
+        unique[value]['plays'] += 1;
+        unique[value]['ms'] += play.ms_played || 0;
+    });
+
+    return unique;
+}
+
+function get_unique_albums(plays) {
+    const unique = {};
+
+    plays.forEach(play => {
+        const value = `${play[album_key]}-${play[artist_key]}`;
+        if (!(value in unique)) {
+            unique[value] = {plays: 0, ms: 0, artist: play[artist_key], album: play[album_key]};
         }
         unique[value]['plays'] += 1;
         unique[value]['ms'] += play.ms_played || 0;
@@ -160,9 +175,11 @@ function render_stats(plays, year=0) {
 
     const unique_tracks = get_unique_tracks(plays);
     const unique_artists = get_unique_artists(plays);
+    const unique_albums = get_unique_albums(plays);
 
     const top_tracks = get_top_n_by_plays(unique_tracks, top_n);
     const top_artists = get_top_n_by_plays(unique_artists, top_n);
+    const top_albums = get_top_n_by_plays(unique_albums, top_n);
 
     const play_time_ms = get_play_time(plays);
     const play_time_minutes = ms_to_minutes(play_time_ms);
@@ -186,6 +203,8 @@ function render_stats(plays, year=0) {
               <div id="top-tracks-${year}" class="top-n">
               </div>
               <div id="top-artists-${year}" class="top-n">
+              </div>
+              <div id="top-albums-${year}" class="top-n">
               </div>
             </div>
         </div>
@@ -213,6 +232,11 @@ function render_stats(plays, year=0) {
     topArtistsDiv.innerHTML = '<p class="small"><strong>Top Artists:</strong></p>';
     top_artists.forEach((item, index) => {
         topArtistsDiv.innerHTML += `<p class="small">${index + 1}. ${item[0]} - <span class="accent">${item[1]['plays']} plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
+    });
+    let topAlbumsDiv = section.querySelector(`#top-albums-${year}`);
+    topAlbumsDiv.innerHTML = '<p class="small"><strong>Top Albums:</strong></p>';
+    top_albums.forEach((item, index) => {
+        topAlbumsDiv.innerHTML += `<p class="small" title="${item[1]['artist']}">${index + 1}. ${item[1]['album']} - <span class="accent">${item[1]['plays']} track plays</span> - <span class="muted">${ms_to_time(item[1]['ms'])}</span></p>`;
     });
 
     let button = document.createElement('button');
@@ -273,6 +297,9 @@ function render_fun_stats(result) {
               <div id="top-countries" class="top-n"></div>
             </div>
             <div id="charts" class="charts-container" aria-hidden="false"></div>
+            <div id="map">
+                <h3 class="small">Listens by Country</h3>
+            </div>
         </div>
     `;
 
@@ -324,6 +351,23 @@ function render_fun_stats(result) {
         }
     } catch (err) {
         console.warn('Failed to render clock chart:', err);
+    }
+
+    // Render world map heatmap into the fun stats panel (if available)
+    try {
+        if (typeof renderGlobeHeatmap === 'function') {
+            const plotEl = renderGlobeHeatmap(result.plays);
+            const container = section.querySelector('#map');
+            if (container) {
+                if (plotEl && plotEl.nodeType) {
+                    container.appendChild(plotEl);
+                } else if (plotEl && typeof plotEl.then === 'function') {
+                    plotEl.then(el => { if (el && el.nodeType) container.appendChild(el); });
+                }
+            }
+        }
+    } catch (err) {
+        console.warn('Failed to render world map heatmap:', err);
     }
 
     let button = document.createElement('button');
