@@ -1,4 +1,4 @@
-import { renderCalendarHeatmap, renderGlobeHeatmap } from './plots.js';
+import { renderCalendarHeatmap, renderGlobeHeatmap, renderPlatformOverTime } from './plots.js';
 import { renderClockChart } from './d3-charts.js';
 
 const artist_key = 'master_metadata_album_artist_name';
@@ -300,6 +300,7 @@ function render_fun_stats(result) {
             <div id="map">
                 <h3 class="small">Listens by Country</h3>
             </div>
+            <div id="platform"></div>
         </div>
     `;
 
@@ -368,6 +369,23 @@ function render_fun_stats(result) {
         }
     } catch (err) {
         console.warn('Failed to render world map heatmap:', err);
+    }
+
+    // Render platform over time chart into the fun stats panel (if available)
+    try {
+        if (typeof renderPlatformOverTime === 'function') {
+            const plotEl = renderPlatformOverTime(result.plays);
+            const container = section.querySelector('#platform');
+            if (container) {
+                if (plotEl && plotEl.nodeType) {
+                    container.appendChild(plotEl);
+                } else if (plotEl && typeof plotEl.then === 'function') {
+                    plotEl.then(el => { if (el && el.nodeType) container.appendChild(el); });
+                }
+            }
+        }
+    } catch (err) {
+        console.warn('Failed to render platform over time chart:', err);
     }
 
     let button = document.createElement('button');

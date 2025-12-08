@@ -216,3 +216,91 @@ export async function renderGlobeHeatmap(plays) {
 
     return plot;
 }
+
+let uncategorisedPlatforms = new Set();
+
+export function renderPlatformOverTime(plays) {
+    // Line chart for 'platform' dataq plays over time, grouped by month
+    if (!plays || plays.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'heatmap-empty';
+        empty.textContent = 'No play data';
+        return empty;
+    }
+
+    // Prepare data: aggregate counts by month and platform
+    const counts = {};
+    for (const p of plays) {
+        const date = new Date(p.ts);
+        const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        const platform = groupPlatform(p.platform);
+        const key = `${yearMonth}||${platform}`;
+        counts[key] = (counts[key] || 0) + 1;
+    }
+
+    // Transform to array for plotting
+    const plotData = [];
+    for (const key in counts) {
+        const [yearMonth, platform] = key.split('||');
+        plotData.push({ yearMonth, platform, count: counts[key] });
+    }
+
+    plotData.sort((a, b) => {
+        if (a.yearMonth < b.yearMonth) return -1;
+        if (a.yearMonth > b.yearMonth) return 1;
+        if (a.platform < b.platform) return -1;
+        if (a.platform > b.platform) return 1;
+        return 0;
+    });
+    // Build ordered list of year-months (e.g. '2025-03') and tick values for years
+    const yearMonths = Array.from(new Set(plotData.map(d => d.yearMonth))).sort((a, b) => a.localeCompare(b));
+    const years = Array.from(new Set(yearMonths.map(ym => ym.split('-')[0]))).map(Number).sort((a,b) => a-b);
+    // use the January month of each year as the tick position so ticks show one per year
+    const tickValues = years.map(y => `${String(y)}-01`);
+
+    // Create the plot
+    const plot = Plot.plot({
+        width: 1100,
+        height: 400,
+        x: {
+            domain: yearMonths,
+            // display only the year for tick labels
+            tickFormat: d => (typeof d === 'string' ? d.split('-')[0] : d),
+            // tick positions: first month of each year
+            ticks: tickValues
+        },
+        y: {
+            label: 'Number of Plays'
+        },
+        marks: [
+            Plot.lineY(plotData, { x: 'yearMonth', y: 'count', stroke: 'platform', curve: 'monotone-x' })
+        ],
+        color: {
+            legend: true
+        }
+    });
+
+    console.log('Uncategorised platforms:', Array.from(uncategorisedPlatforms).sort());
+    return plot;
+}
+
+function groupPlatform(platform) {
+    if (!platform) return 'Unknown';
+    const p = platform.toLowerCase();
+    if (p.includes('android os')) return 'Android';
+    if (p.includes('android-tablet os')) return 'Android Tablet';
+    if (p.includes('android_tv')) return 'Android TV';
+    if (p.includes('ios')) return 'iOS';
+    if (p.includes('windows 7')) return 'Windows 7';
+    if (p.includes('windows 8')) return 'Windows 8';
+    if (p.includes('windows 10')) return 'Windows 10';
+    if (p.includes('windows phone')) return 'Windows Phone';
+    if (p.includes('windows xp')) return 'Windows XP';
+    if (p.includes('xbox')) return 'Xbox';
+    if (p.includes('os x')) return 'Mac OS';
+    if (p.includes('applewatch')) return 'Apple Watch';
+    if (p.includes('sonos')) return 'Sonos';
+    if (p.includes('echo_dot')) return 'Alexa';
+    uncategorisedPlatforms.add(platform);
+    return "Other";
+}
