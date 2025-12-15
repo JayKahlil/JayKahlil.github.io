@@ -69,7 +69,8 @@ const groups = [
     "vegans",
     "geese",
     "the working class",
-    "Britons"
+    "Britons",
+    "migrants",
 ];
 const subjects = [
     "face masks",
@@ -311,6 +312,20 @@ const policyTypes = [
     "free",
     "bonus"
 ];
+const binaryAnswers = [
+    "yes",
+    "no"
+];
+const binaryConclusions = [
+    "in fact",
+    "not"
+];
+
+const correspondingLists = {
+    people: pronounClaim,
+    parties: leaders,
+    binaryAnswers: binaryConclusions
+};
 
 const peopleAndSubjects = [...people, ...subjects];
 const allActions = [...actions, ...actions2];
@@ -335,7 +350,8 @@ const templates = [
     ["%s posts photo of what %s is %s", [people, pronounClaim, things2]],
     ["%s will introduce %s %s if elected says %s", [parties, policyTypes, subjects, leaders]],
     ["%s: %s promise %s %s", [leaders, parties, policyTypes, subjects]],
-    ["%s pledge to fix %s 'disastrous' %s", [parties, partiesPossesive, subjects]]
+    ["%s pledge to fix %s 'disastrous' %s", [parties, partiesPossesive, subjects]],
+    ["%s told that, %s, %s are %s '%s %s in %s'", [people, ["yes", "no"], groups, ["in fact", "not"], actions, things, places]],
 ]
 
 
@@ -354,8 +370,19 @@ function format(template, ...args) {
     return template.replace(/%s/g, () => args.shift());
 }
 
+var currentCorrespondingChoice = null;
+var currentCorrespondingList = null;
 function getRandomElement(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
+    if (arr === currentCorrespondingList)
+
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    if (arr in correspondingLists) {
+        const correspondingList = correspondingLists[arr];
+        currentCorrespondingChoice = correspondingList[randomIndex];
+        currentCorrespondingList = correspondingList;
+    }
+
+    return arr[randomIndex];
 }
 
 document.body.onkeyup = function (e) {

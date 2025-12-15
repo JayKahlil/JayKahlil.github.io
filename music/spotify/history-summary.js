@@ -181,7 +181,7 @@ function render_stats(plays, podcast_plays, year=0) {
             generateImageForYear(plays, podcast_plays, year).then(url => {
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `spotify-summary-${year}.png`;
+                a.download = `spotify-summary-${year === 0 ? 'all-time' : year}.png`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);

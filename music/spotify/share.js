@@ -198,7 +198,7 @@ export function generateImageForYear(plays, podcast_plays, year) {
         ctx.fillStyle = accentColour;
         ctx.font = `bold ${30 * scale}px Arial`;
         ctx.textAlign = 'center';
-        ctx.fillText(`Spotify Summary for ${year}`, width / 2, 90 * scale);
+        ctx.fillText(`Spotify Summary for ${year === 0 ? 'All Time' : year}`, width / 2, 90 * scale);
 
         // Stats Section
         ctx.textAlign = 'left';

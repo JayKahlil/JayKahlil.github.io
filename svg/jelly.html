@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SVG Jelly Path</title>
+  <style>
+    body { margin: 0; display:flex; height:100vh; align-items:center; justify-content:center; background:#111; }
+    svg { width:90vw; max-width:1000px; height:220px; display:block; }
+    path { fill: none; stroke: #5ee; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 6px 18px rgba(0,0,0,.6)); }
+  </style>
+</head>
+<body>
+  <svg id="svg" viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- initial smooth curve (will be replaced when an external SVG is provided) -->
+    <path id="jelly" d="M20 100 C 200 40, 400 160, 600 80 C 760 30, 920 140, 980 100" />
+  </svg>
+
+  <script>
+  (function(){
+    const svg = document.getElementById('svg');
+    const path = document.getElementById('jelly');
+    // support extracting one or many source <path> elements from an external SVG (single <path> or a <g> with many <path>s)
+    let sourcePaths = null;
+    let _offscreenSvg = null;
+
+    // You can pass ?src=fatbaby-v1.svg&sel=#path1
+    // - src: path to the external SVG (relative or absolute)
+    // - sel: optional selector for the path inside that SVG (defaults to #path1 then first <path>)
+    const params = new URLSearchParams(location.search);
+    const src = params.get('src');
+    const selector = params.get('sel') || '#path1';
+
+    // load external svg if provided, then start animation (or start immediately)
+    if (src) {
+      fetch(src).then(r => r.text()).then(text => {
+        try {
+          const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+          const extSvg = doc.querySelector('svg');
+          if (extSvg) {
+            const vb = extSvg.getAttribute('viewBox');
+            if (vb) svg.setAttribute('viewBox', vb);
+          }
+          // try selector first, then fallback to first path
+          let extElem = doc.querySelector(selector) || doc.querySelector('path');
+          if (!extElem) {
+            console.warn('No path or selector match found in external SVG:', src);
+          } else {
+            // Create a tiny offscreen SVG so getTotalLength()/getPointAtLength() work reliably
+            _offscreenSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            if (extSvg && extSvg.getAttribute('viewBox')) _offscreenSvg.setAttribute('viewBox', extSvg.getAttribute('viewBox'));
+            _offscreenSvg.style.position = 'absolute';
+            _offscreenSvg.style.width = '0'; _offscreenSvg.style.height = '0';
+            _offscreenSvg.style.overflow = 'hidden'; _offscreenSvg.style.pointerEvents = 'none';
+            document.body.appendChild(_offscreenSvg);
+
+            if (extElem.tagName.toLowerCase() === 'path') {
+              const clone = extElem.cloneNode(true);
+              _offscreenSvg.appendChild(clone);
+              sourcePaths = [clone];
+              // set visible path so user sees shape immediately
+              const d = extElem.getAttribute('d'); if (d) path.setAttribute('d', d);
+            } else {
+              // collect descendant paths (supports groups with many paths)
+              const parts = Array.from(extElem.querySelectorAll('path'));
+              if (parts.length === 0) {
+                const first = doc.querySelector('path'); if (first) parts.push(first);
+              }
+              if (parts.length === 0) {
+                console.warn('No <path> elements found inside selected element in external SVG:', src);
+              } else {
+                sourcePaths = parts.map(p => {
+                  const clone = p.cloneNode(true);
+                  _offscreenSvg.appendChild(clone);
+                  return clone;
+                });
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Error parsing external SVG', err);
+        }
+      }).catch(err => {
+        console.warn('Failed to fetch external SVG', err);
+      }).finally(init); // start either way
+    } else {
+      init();
+    }
+
+    function init() {
+      const samples = 60;                     // number of sample points along the path
+      const points = [];                      // state: {x,y,restX,restY,vx,vy}
+      const spring = 0.08;                    // spring stiffness toward rest position
+      const damping = 0.85;                   // velocity damping
+      const mouseInfluence = 90;              // radius of influence in px (SVG units)
+      const pushStrength = 12;                // how hard the mouse pushes points
+
+      // sample the path and initialize state
+      // ensure path data is available before sampling
+      try {
+        if (sourcePaths && sourcePaths.length) {
+          // sample across multiple source paths by treating their lengths as a single combined length
+          const lengths = sourcePaths.map(p => p.getTotalLength());
+          const total = lengths.reduce((a,b) => a + b, 0);
+          for (let i = 0; i < samples; i++) {
+            const t = i / (samples - 1);
+            let L = t * total;
+            // find which path this L falls into
+            let idx = 0; let acc = lengths[0];
+            while (L > acc && idx < lengths.length - 1) { idx++; acc += lengths[idx]; }
+            const prevAcc = acc - lengths[idx];
+            const local = Math.max(0, L - prevAcc);
+            const p = sourcePaths[idx].getPointAtLength(local);
+            points.push({ x: p.x, y: p.y, restX: p.x, restY: p.y, vx: 0, vy: 0 });
+          }
+          if (_offscreenSvg) { _offscreenSvg.remove(); _offscreenSvg = null; }
+        } else {
+          const total = path.getTotalLength();
+          for (let i = 0; i < samples; i++) {
+            const t = i / (samples - 1);
+            const p = path.getPointAtLength(t * total);
+            points.push({ x: p.x, y: p.y, restX: p.x, restY: p.y, vx: 0, vy: 0 });
+          }
+        }
+      } catch (err) {
+         console.error('Unable to sample path. Is the path valid?', err);
+         return;
+       }
+
+      // pointer position in SVG coords
+      const pointer = { x: -9999, y: -9999, active: false };
+
+      svg.addEventListener('mousemove', e => {
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX; pt.y = e.clientY;
+        const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+        pointer.x = svgP.x; pointer.y = svgP.y; pointer.active = true;
+      });
+      window.addEventListener('mouseout', () => pointer.active = false);
+      window.addEventListener('touchmove', e => {
+        const t = e.touches[0];
+        const pt = svg.createSVGPoint();
+        pt.x = t.clientX; pt.y = t.clientY;
+        const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+        pointer.x = svgP.x; pointer.y = svgP.y; pointer.active = true;
+      }, {passive:true});
+      window.addEventListener('touchend', () => pointer.active = false);
+
+      function step() {
+        // physics update
+        for (let i = 0; i < points.length; i++) {
+          const p = points[i];
+
+          // spring back to rest
+          const sx = p.restX - p.x;
+          const sy = p.restY - p.y;
+          p.vx += sx * spring;
+          p.vy += sy * spring;
+
+          // mouse push
+          if (pointer.active) {
+            const dx = p.x - pointer.x;
+            const dy = p.y - pointer.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < mouseInfluence && dist > 0.001) {
+              const effect = (1 - dist / mouseInfluence) * pushStrength;
+              // push away from pointer
+              p.vx += (dx / dist) * effect;
+              p.vy += (dy / dist) * effect;
+            }
+          }
+
+          // apply damping
+          p.vx *= damping;
+          p.vy *= damping;
+
+          // update position
+          p.x += p.vx;
+          p.y += p.vy;
+        }
+
+        // render
+        for (let i = 0; i < points.length - 1; i++) {
+          const p0 = points[i];
+          const p1 = points[i+1];
+          const mid = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
+          const ctrl = { x: (p0.x + mid.x) / 2, y: (p0.y + mid.y) / 2 };
+          const cmd = { x: (p1.x + mid.x) / 2, y: (p1.y + mid.y) / 2 };
+          path.setPointAtLength(i / (points.length - 1) * path.getTotalLength(), ctrl.x, ctrl.y, 0);
+          path.setPointAtLength((i + 1) / (points.length - 1) * path.getTotalLength(), cmd.x, cmd.y, 0);
+        }
+
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+  })();
+  </script>
+</body>
+</html>
