@@ -65,14 +65,12 @@ export function renderClockChart(plays, accent = 'var(--accent)', muted = 'var(-
         .attr('stroke-dasharray', '3,3');
 
     // Label radial ticks in minutes (small white numbers) — stack labels vertically to avoid overlap
-    const tickLabelOffset = 6;
-    const nTickLabels = radialTicks.length;
     gridG.selectAll('text')
         .data(radialTicks)
         .enter()
         .append('text')
-        .attr('x', d => y(d) + tickLabelOffset)
-        .attr('y', (d, i) => (i - (nTickLabels - 1) / 2) * 14 + 3)
+        .attr('x', 5)
+        .attr('y', d => -y(d) + 3)
         .attr('fill', 'white')
         .attr('font-size', 10)
         .attr('font-family', 'sans-serif')
@@ -186,7 +184,7 @@ export function renderSvgPlatformOverTime(plays, platform_grouping_type) {
     const plotData = [];
     for (const key in counts) {
         const [yearMonth, platform] = key.split('||');
-        plotData.push({ yearMonth, platform, count: counts[key] });
+        plotData.push({ yearMonth: new Date(`${yearMonth}-01`), platform, count: counts[key] });
     }
 
     plotData.sort((a, b) => {
@@ -197,10 +195,10 @@ export function renderSvgPlatformOverTime(plays, platform_grouping_type) {
         return 0;
     });
     // Build ordered list of year-months (e.g. '2025-03') and tick values for years
-    const yearMonths = Array.from(new Set(plotData.map(d => d.yearMonth))).sort((a, b) => a.localeCompare(b));
-    const years = Array.from(new Set(yearMonths.map(ym => ym.split('-')[0]))).map(Number).sort((a,b) => a-b);
+    const yearMonths = Array.from(new Set(plotData.map(d => d.yearMonth))).sort((a, b) => a - b);
+    const years = Array.from(new Set(yearMonths.map(ym => ym.getFullYear()))).map(Number).sort((a,b) => a-b);
     // use the January month of each year as the tick position so ticks show one per year
-    const tickValues = years.map(y => `${String(y)}-01`);
+    const tickValues = years.map(y => new Date(`${String(y)}-01-01`));
 
     // Create the plot
     const svg = d3.create("svg")
@@ -213,10 +211,9 @@ export function renderSvgPlatformOverTime(plays, platform_grouping_type) {
     const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Scales
-    const x = d3.scalePoint()
-        .domain(yearMonths)
-        .range([0, width])
-        .padding(0.5);
+    const x = d3.scaleTime()
+        .domain(d3.extent(yearMonths))
+        .range([0, width]);
 
     const y = d3.scaleLinear()
         .domain([0, d3.max(plotData, d => d.count)]).nice()
@@ -232,20 +229,31 @@ export function renderSvgPlatformOverTime(plays, platform_grouping_type) {
 
     const yAxis = d3.axisLeft(y);
 
-    g.append("g")
+    const xAxisGroup = g.append("g")
         .attr("transform", `translate(0,${height})`)
-        .call(xAxis)
-        .selectAll("text")
+        .call(xAxis);
+
+    xAxisGroup.selectAll(".tick line") // Select the tick lines
+        .attr("stroke", "white"); // Set their stroke to white
+    xAxisGroup.selectAll(".domain") // Select the axis line
+        .attr("stroke", "white"); // Set its stroke to white
+    xAxisGroup.selectAll("text")
         .attr("fill", "white") // Add this for tick labels
         .attr("transform", "rotate(-45)")
         .style("text-anchor", "end");
 
-    g.append("g")
-        .call(yAxis)
-        .selectAll("text")
-        .attr("fill", "white") // Add this for tick labels
-        .append("text")
-        .attr("fill", "#ffffffff")
+    const yAxisGroup = g.append("g")
+        .call(yAxis);
+
+    yAxisGroup.selectAll(".tick line") // Select the tick lines
+        .attr("stroke", "white"); // Set their stroke to white
+    yAxisGroup.selectAll(".domain") // Select the axis line
+        .attr("stroke", "white"); // Set its stroke to white
+    yAxisGroup.selectAll("text") // Select the tick text labels
+        .attr("fill", "white"); // Set their fill to white
+
+    yAxisGroup.append("text") // Append the axis label
+        .attr("fill", "white")
         .attr("x", 5)
         .attr("y", 15)
         .attr("text-anchor", "start")
@@ -288,6 +296,7 @@ export function renderSvgPlatformOverTime(plays, platform_grouping_type) {
             .attr("y", 10)
             .attr("text-anchor", "start")
             .style("text-transform", "capitalize")
+            .attr("font-family", "sans-serif")
             .text(platform);
     });
 

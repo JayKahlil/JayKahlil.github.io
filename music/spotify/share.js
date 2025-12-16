@@ -202,6 +202,12 @@ export function generateImageForYear(plays, podcast_plays, year) {
         ctx.textAlign = 'center';
         ctx.fillText(`Spotify Summary for ${year === 0 ? 'All Time' : year}`, width / 2, 90 * scale);
 
+        // Footer
+        ctx.fillStyle = mutedColour;
+        ctx.font = `${14 * scale}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.fillText(`Generated at things.jayhussaini.com/music/spotify`, width / 2, height - 30 * scale);
+
         // Stats Section
         ctx.textAlign = 'left';
 
@@ -364,8 +370,6 @@ function drawFunStatList(ctx, title, list, x, y, cardWidth, scale = 1) {
     });
 }
 
-
-
 export function generateImageForFunStats(result) {
     const plays_by_date = Object.entries(result.plays).sort((a, b) => new Date(a[1]['ts']) - new Date(b[1]['ts']));
 
@@ -393,7 +397,7 @@ export function generateImageForFunStats(result) {
         let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d');
         const width = 800 * scale;
-        const height = 1675 * scale;
+        const height = 1740 * scale;
         canvas.width = width;
         canvas.height = height;
 
@@ -439,6 +443,12 @@ export function generateImageForFunStats(result) {
         ctx.font = `bold ${30 * scale}px Arial`;
         ctx.textAlign = 'center';
         ctx.fillText(`Fun Stats`, width / 2, 90 * scale);
+
+        // Footer
+        ctx.fillStyle = mutedColour;
+        ctx.font = `${14 * scale}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.fillText(`Generated at things.jayhussaini.com/music/spotify`, width / 2, height - 30 * scale);
 
         // Stats Section
         ctx.textAlign = 'left';
@@ -514,7 +524,7 @@ export function generateImageForFunStats(result) {
                 { svg: calendarHeatmap, x: (width - 1420) / 2, y: 1250, w: 710, h: 710 },
                 { svg: clockChart, x: (width - 1420) / 2 + 710, y: 1250, w: 710, h: 710 },
                 { svg: globalHeatmap, x: (width - 1420) / 2, y: 2000, w: 1420, h: 820 },
-                { svg: platformOverTime, x: (width - 1420) / 2, y: 2870, w: 1420, h: 400 },
+                { svg: platformOverTime, x: (width - 1420) / 2, y: 2870, w: 1420, h: 516 },
             ];
 
             diagrams = diagrams.filter(d => d.svg);
