@@ -1,4 +1,4 @@
-import { renderCalendarHeatmap, renderGlobeHeatmap, renderPlatformOverTime } from './plots.js';
+import { renderCalendarHeatmap, renderGlobeHeatmap } from './plots.js';
 import { renderClockChart, renderSvgPlatformOverTime } from './d3-charts.js';
 import { generateImageForFunStats, generateImageForYear } from './share.js';
 import { getDataForYear, ms_to_minutes, ms_to_time } from './year-stats.js';
@@ -437,6 +437,7 @@ function set_tab_listeners() {
 
 function setPlatformTypeListeners() {
     const platformTypeInputs = document.getElementsByName('platform-type');
+    const jsonUpload = document.getElementById('json-upload');
     platformTypeInputs.forEach(input => {
         input.addEventListener('change', (event) => {
             console.log('Platform grouping type changed to', event.target.value);

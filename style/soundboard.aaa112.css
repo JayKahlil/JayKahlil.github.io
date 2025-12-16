@@ -93,7 +93,7 @@ body {
 	position: fixed;
 	z-index: 10;
 	text-align: center;
-	vertical-align: center;
+	vertical-align: middle;
 	transform:translate(-50%, -50%);
 	top: 50%;
 	left: 50%
@@ -307,7 +307,7 @@ gaps = 30% width = 30 / [no. gaps]
 */
 
 /* phone only */
-@media (max-width: 599px), (-webkit-device-pixel-ratio: 2), {
+@media (max-width: 599px), (-webkit-device-pixel-ratio: 2) {
 	#soundBox2 {
 		display: grid;
 		grid-template-columns: auto auto auto auto;

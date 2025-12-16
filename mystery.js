@@ -90,7 +90,7 @@ function randomSound() {
 function playIt(name, altNumber){
     var fileName
     if (altNumber > 0) {
-        chosenAlt = Math.floor((Math.random() * altNum) + 1)
+        let chosenAlt = Math.floor((Math.random() * altNumber) + 1)
         fileName = name + chosenAlt
     } else {
         fileName = name

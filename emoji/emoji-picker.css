@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+
 body {
     font-family: 'Montserrat', Arial, Helvetica, sans-serif;
     display: flex;
@@ -13,8 +15,6 @@ body {
     0% { background-position: 0% 50%; }
     100% { background-position: 100% 50%; }
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
 
 /* Funky, readable heading with solid color and contrast */
 h1 {

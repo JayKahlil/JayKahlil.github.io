@@ -1,7 +1,7 @@
 {
   "name": "jaykahlil.github.io",
   "version": "1.0.0",
-  "description": "",
+  "description": "jayhussaini.com github pages source code",
   "homepage": "https://github.com/JayKahlil/JayKahlil.github.io#readme",
   "bugs": {
     "url": "https://github.com/JayKahlil/JayKahlil.github.io/issues"
@@ -13,7 +13,6 @@
   "license": "ISC",
   "author": "Jay Kahlil Hussaini",
   "type": "commonjs",
-  "main": " ",
   "scripts": {
     "format": "npm run format:eslint && npm run format:prettier",
     "format:eslint": "npm run lint:eslint -- --fix",

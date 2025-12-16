@@ -8,7 +8,6 @@ var height = window.innerHeight;
 const lbOrange = "#ee8732";
 const lbGreen = "#66dd66";
 const lbBlue = "#65baef";
-const starYellow = "#f5c518";
 const starColours = [
     "#ffbb7b",
     "#ffc690",
@@ -493,7 +492,7 @@ function loadJaysGraph(type) {
 
 loadJaysGraph('diary');
 
-onload = (event) => {
+onload = () => {
     document.getElementById('star-toggle-checkbox').checked = false;
     document.querySelector('input[id="diary-choice"]').checked = true;
 }

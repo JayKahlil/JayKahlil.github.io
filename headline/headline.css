@@ -35,7 +35,7 @@ body {
 	position: absolute;
 	top: 25%;
 	-ms-transform: translateY(-25%);
-	transform: translaterY(-25%);
+	transform: translateY(-25%);
 }
 
 #news {
@@ -100,11 +100,11 @@ body {
 	font-size: .875rem;
 	line-height: 1.28571;
 	color: #ececec;
-	margin: 0 0 0 15;
+	margin: 0 0 0 15px;
 	position: absolute;
 	top: 10%;
 	-ms-transform: translateY(-10%);
-	transform: translaterY(-10%);
+	transform: translateY(-10%);
 }
 
 #learn-more {
@@ -113,11 +113,11 @@ body {
 	font-size: .875rem;
 	line-height: 1.28571;
 	color: #ececec;
-	margin: 0 0 0 15;
+	margin: 0 0 0 15px;
 	position: absolute;
 	bottom: 10%;
 	-ms-transform: translateY(10%);
-	transform: translaterY(10%);
+	transform: translateY(10%);
 }
 
  /* unvisited link */
