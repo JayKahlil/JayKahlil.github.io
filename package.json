@@ -1,5 +1,34 @@
 {
+  "name": "jaykahlil.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/JayKahlil/JayKahlil.github.io#readme",
+  "bugs": {
+    "url": "https://github.com/JayKahlil/JayKahlil.github.io/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JayKahlil/JayKahlil.github.io.git"
+  },
+  "license": "ISC",
+  "author": "Jay Kahlil Hussaini",
+  "type": "commonjs",
+  "main": " ",
+  "scripts": {
+    "format": "npm run format:eslint && npm run format:prettier",
+    "format:eslint": "npm run lint:eslint -- --fix",
+    "format:prettier": "npm run lint:prettier -- --write --tab-width=4",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint . --ext .js",
+    "lint:prettier": "prettier . --check --tab-width=4"
+  },
   "devDependencies": {
-    "eslint": "^9.39.2"
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^9.39.2",
+    "@eslint/json": "^0.14.0",
+    "@eslint/markdown": "^7.5.1",
+    "eslint": "^9.39.2",
+    "globals": "^16.5.0",
+    "prettier": "^3.0.0"
   }
 }

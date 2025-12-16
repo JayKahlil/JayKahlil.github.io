@@ -1,6 +1,6 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-export function renderClockChart(plays) {
+export function renderClockChart(plays, accent = 'var(--accent)', muted = 'var(--muted)') {
     // Aggregate played time (in minutes) separately for AM and PM on a 12-hour (720 minute) clock
     const minutesPerHalfDay = 12 * 60; // 720
     const amMinutes = new Array(minutesPerHalfDay).fill(0);
@@ -83,7 +83,7 @@ export function renderClockChart(plays) {
         .datum(amData)
         .attr('d', lineRadial)
         .attr('fill', 'none')
-        .attr('stroke', 'var(--muted)') // AM
+        .attr('stroke', muted) // AM
         .attr('stroke-width', 1.8)
         .attr('stroke-linejoin', 'round')
         .attr('stroke-linecap', 'round');
@@ -92,7 +92,7 @@ export function renderClockChart(plays) {
         .datum(pmData)
         .attr('d', lineRadial)
         .attr('fill', 'none')
-        .attr('stroke', 'var(--accent)') // PM
+        .attr('stroke', accent) // PM
         .attr('stroke-width', 1.8)
         .attr('stroke-linejoin', 'round')
         .attr('stroke-linecap', 'round');
@@ -103,8 +103,8 @@ export function renderClockChart(plays) {
         .attr('transform', `translate(${ -outerRadius + 12 }, ${ -outerRadius + 12 })`);
 
     const legendItems = [
-        { label: 'AM (minutes)', color: 'var(--muted)' },
-        { label: 'PM (minutes)', color: 'var(--accent)' }
+        { label: 'AM (minutes)', color: muted },
+        { label: 'PM (minutes)', color: accent }
     ];
 
     const itemHeight = 16;
@@ -165,4 +165,174 @@ export function renderClockChart(plays) {
         .attr('font-family', 'sans-serif');
 
     return svg.node();
+}
+
+
+let uncategorisedPlatforms = new Set();
+export function renderSvgPlatformOverTime(plays, platform_grouping_type) {
+    // Line chart for 'platform' dataq plays over time, grouped by month
+
+        // Prepare data: aggregate counts by month and platform
+    const counts = {};
+    for (const p of plays) {
+        const date = new Date(p.ts);
+        const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        const platform = groupPlatform(p.platform, platform_grouping_type);
+        const key = `${yearMonth}||${platform}`;
+        counts[key] = (counts[key] || 0) + 1;
+    }
+
+    // Transform to array for plotting
+    const plotData = [];
+    for (const key in counts) {
+        const [yearMonth, platform] = key.split('||');
+        plotData.push({ yearMonth, platform, count: counts[key] });
+    }
+
+    plotData.sort((a, b) => {
+        if (a.yearMonth < b.yearMonth) return -1;
+        if (a.yearMonth > b.yearMonth) return 1;
+        if (a.platform < b.platform) return -1;
+        if (a.platform > b.platform) return 1;
+        return 0;
+    });
+    // Build ordered list of year-months (e.g. '2025-03') and tick values for years
+    const yearMonths = Array.from(new Set(plotData.map(d => d.yearMonth))).sort((a, b) => a.localeCompare(b));
+    const years = Array.from(new Set(yearMonths.map(ym => ym.split('-')[0]))).map(Number).sort((a,b) => a-b);
+    // use the January month of each year as the tick position so ticks show one per year
+    const tickValues = years.map(y => `${String(y)}-01`);
+
+    // Create the plot
+    const svg = d3.create("svg")
+        .attr("width", 1100)
+        .attr("height", 400);
+    const margin = { top: 20, right: 150, bottom: 50, left: 60 };
+    const width = +svg.attr("width") - margin.left - margin.right;
+    const height = +svg.attr("height") - margin.top - margin.bottom;
+
+    const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Scales
+    const x = d3.scalePoint()
+        .domain(yearMonths)
+        .range([0, width])
+        .padding(0.5);
+
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(plotData, d => d.count)]).nice()
+        .range([height, 0]);
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10)
+        .domain(Array.from(new Set(plotData.map(d => d.platform))));
+
+    // Axes
+    const xAxis = d3.axisBottom(x)
+        .tickValues(tickValues)
+        .tickFormat(d3.timeFormat("%Y"));
+
+    const yAxis = d3.axisLeft(y);
+
+    g.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(xAxis)
+        .selectAll("text")
+        .attr("fill", "white") // Add this for tick labels
+        .attr("transform", "rotate(-45)")
+        .style("text-anchor", "end");
+
+    g.append("g")
+        .call(yAxis)
+        .selectAll("text")
+        .attr("fill", "white") // Add this for tick labels
+        .append("text")
+        .attr("fill", "#ffffffff")
+        .attr("x", 5)
+        .attr("y", 15)
+        .attr("text-anchor", "start")
+        .text("Number of Plays");
+
+    // Line generator
+    const line = d3.line()
+        .x(d => x(d.yearMonth))
+        .y(d => y(d.count));
+
+    // Nest data by platform
+    const platforms = d3.groups(plotData, d => d.platform);
+
+    // Draw lines
+    for (const [platform, data] of platforms) {
+        g.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", color(platform))
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+    }
+
+    // Legend
+    const legend = svg.append("g")
+        .attr("transform", `translate(${width + margin.left + 20},${margin.top})`);
+
+    platforms.forEach(([platform], i) => {
+        const legendRow = legend.append("g")
+            .attr("transform", `translate(0, ${i * 20})`);
+
+        legendRow.append("rect")
+            .attr("width", 12)
+            .attr("height", 12)
+            .attr("fill", color(platform));
+
+        legendRow.append("text")
+            .attr("fill", "#ffffffff")
+            .attr("x", 18)
+            .attr("y", 10)
+            .attr("text-anchor", "start")
+            .style("text-transform", "capitalize")
+            .text(platform);
+    });
+
+    return svg.node();
+}
+
+function groupPlatform(platform, platform_grouping_type) {
+    if (platform_grouping_type === 'device-type') {
+        return groupPlatformByType(platform);
+    }
+
+    if (!platform) return 'Unknown';
+    const p = platform.toLowerCase();
+    if (p.includes('android os')) return 'Android';
+    if (p.includes('android-tablet os')) return 'Android Tablet';
+    if (p.includes('android_tv')) return 'Android TV';
+    if (p.includes('ios')) return 'iOS';
+    if (p.includes('windows 7')) return 'Windows 7';
+    if (p.includes('windows 8')) return 'Windows 8';
+    if (p.includes('windows 10')) return 'Windows 10';
+    if (p.includes('windows phone')) return 'Windows Phone';
+    if (p.includes('windows xp')) return 'Windows XP';
+    if (p.includes('xbox')) return 'Xbox';
+    if (p.includes('os x')) return 'Mac OS';
+    if (p.includes('applewatch')) return 'Apple Watch';
+    if (p.includes('sonos')) return 'Sonos';
+    if (p.includes('echo_dot')) return 'Alexa';
+
+    if (platform_grouping_type === 'specific-with-other') {
+        return platform;
+    }
+    uncategorisedPlatforms.add(platform);
+    return "Other";
+}
+
+function groupPlatformByType(platform) {
+    if (!platform) return 'Unknown';
+    const p = platform.toLowerCase();
+
+    if (p.includes('windows phone') || p.includes('android os') || p.includes('ios') || p.includes('android-tablet os')) return 'Mobile';
+    if (p.includes('tv') || p.includes('xbox')) return 'TV';
+    if (p.includes('windows') || p.includes('os x')) return 'Desktop';
+    if (p.includes('applewatch')) return 'Smart Watch';
+    if (p.includes('sonos') || p.includes('echo_dot') || p.includes('denon') || p.includes('yamaha')) return 'Speaker/HiFi';
+
+    uncategorisedPlatforms.add(platform);
+    return "Other";
 }

@@ -77,6 +77,10 @@ export function renderCalendarHeatmap(plays) {
 
     return Plot.plot({
         width: 450,
+        style: {
+            background: 'transparent',
+            color: 'white',
+        },
         x: { domain: Array.from({length:12}, (_,i) => i+1), label: null, tickFormat: d => monthLabels[d-1] },
         y: { domain: years, label: null, tickFormat: y => String(y).replace(/,/g,'') }, // earliest year at top, no commas
         marks: [
@@ -102,7 +106,7 @@ export function renderCalendarHeatmap(plays) {
     });
 }
 
-export async function renderGlobeHeatmap(plays) {
+export async function renderGlobeHeatmap(plays, muted = 'var(--muted)') {
     // Handle empty plays
     if (!plays || plays.length === 0) {
         const empty = document.createElement('div');
@@ -204,7 +208,7 @@ export async function renderGlobeHeatmap(plays) {
         height: 520,
         projection: 'equal-earth',
         marks: [
-            Plot.sphere({stroke: "var(--muted)"}),
+            Plot.sphere({stroke: muted}),
             Plot.geo(geo, {
                 fill: d => interpolateColor(d.properties && d.properties._value),
                 stroke: '#222',
@@ -220,7 +224,7 @@ export async function renderGlobeHeatmap(plays) {
 let uncategorisedPlatforms = new Set();
 
 export function renderPlatformOverTime(plays, platform_grouping_type) {
-    // Line chart for 'platform' dataq plays over time, grouped by month
+    // Line chart for 'platform' data plays over time, grouped by month
     if (!plays || plays.length === 0) {
         const empty = document.createElement('div');
         empty.className = 'heatmap-empty';
@@ -262,6 +266,10 @@ export function renderPlatformOverTime(plays, platform_grouping_type) {
     const plot = Plot.plot({
         width: 1100,
         height: 400,
+        style: {
+            background: 'transparent',
+            color: 'white',
+        },
         x: {
             domain: yearMonths,
             // display only the year for tick labels
@@ -277,7 +285,17 @@ export function renderPlatformOverTime(plays, platform_grouping_type) {
             Plot.lineY(plotData, { x: 'yearMonth', y: 'count', stroke: 'platform', curve: 'monotone-x' })
         ],
         color: {
-            legend: true
+            legend: true,
+            range: [ // A range of about 30 distinct colors
+                '#1DB954',
+                '#FFD166',
+                '#FF6F61',
+                '#6A4C93',
+                '#1982C4',
+                '#8AC926',
+                '#FFCA3A',
+                '#FF595E'
+            ]
         }
     });
 

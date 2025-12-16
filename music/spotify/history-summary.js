@@ -1,13 +1,11 @@
 import { renderCalendarHeatmap, renderGlobeHeatmap, renderPlatformOverTime } from './plots.js';
-import { renderClockChart } from './d3-charts.js';
-import { generateImageForYear } from './share.js';
+import { renderClockChart, renderSvgPlatformOverTime } from './d3-charts.js';
+import { generateImageForFunStats, generateImageForYear } from './share.js';
 import { getDataForYear, ms_to_minutes, ms_to_time } from './year-stats.js';
 
 const artist_key = 'master_metadata_album_artist_name';
 const track_key = 'master_metadata_track_name';
 const track_uri_key = 'spotify_track_uri';
-const album_key = 'master_metadata_album_album_name';
-const show_key = 'episode_show_name';
 const podcast_uri_key = 'spotify_episode_uri';
 
 let top_n = 5;
@@ -19,7 +17,7 @@ let platform_grouping_type = null;
 const regionNamesInEnglish = new Intl.DisplayNames(["en"], { type: "region" });
 
 // Read all plays from a directory handle (native picker) or an array/FileList of File objects (fallback)
-async function get_all_plays(files, play_type=track_uri_key) {
+async function get_all_plays(files, play_type = track_uri_key) {
     const plays = [];
     const plays_by_year = {};
     const fileArray = Array.from(files || []);
@@ -40,11 +38,11 @@ async function get_all_plays(files, play_type=track_uri_key) {
                             plays_by_year[year] = [];
                         }
                         plays_by_year[year].push(play);
-                        
+
                         if (play['skipped']) {
                             let track_uri = play[play_type];
                             if (!(track_uri in skip_counts)) {
-                                skip_counts[track_uri] = {track: play[track_key], artist: play[artist_key], count: 0};
+                                skip_counts[track_uri] = { track: play[track_key], artist: play[artist_key], count: 0 };
                             }
                             skip_counts[track_uri]['count'] += 1;
                         }
@@ -67,10 +65,10 @@ async function get_all_plays(files, play_type=track_uri_key) {
         }
     }));
 
-    return {plays, plays_by_year, skip_counts, shuffle_count, countries};
+    return { plays, plays_by_year, skip_counts, shuffle_count, countries };
 }
 
-function render_stats(plays, podcast_plays, year=0) {
+function render_stats(plays, podcast_plays, year = 0) {
     const {
         unique_tracks,
         unique_artists,
@@ -171,13 +169,13 @@ function render_stats(plays, podcast_plays, year=0) {
         button.innerText = `${year}`;
         document.getElementById(`tab-${previous_year}`).after(button);
     }
-    
+
     const downloadIcon = section.querySelector(`#download-summary-icon-${year}`);
     if (downloadIcon) {
         downloadIcon.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
-            
+
             generateImageForYear(plays, podcast_plays, year).then(url => {
                 const a = document.createElement('a');
                 a.href = url;
@@ -225,7 +223,10 @@ function render_fun_stats(result) {
     section.setAttribute('role', 'tabpanel');
     section.setAttribute('aria-hidden', 'true');
     section.innerHTML = `
-        <div class="card">
+        <div class="card" style="position: relative;">
+            <a id="download-summary-icon-stats" href="#" title="Download Summary Image" class="download-icon" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 1;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </a>
             <p class="small">First Ever Song: <a class="track-link" href="${first[track_uri_key]}"><span class="play_icon">▶</span>${first[track_key]} - ${first[artist_key]}</a> - ${new Date(first['ts'])}</p>
             <p class="small">On shuffle <span class="accent">${shuffle_percent}%</span> of the time</p>
             <div class="top-n-row">
@@ -323,6 +324,26 @@ function render_fun_stats(result) {
 
     render_platform_chart(result.plays);
 
+    const downloadIcon = section.querySelector(`#download-summary-icon-stats`);
+    if (downloadIcon) {
+        downloadIcon.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            generateImageForFunStats(result).then(url => {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `spotify-summary-fun-stats.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }).catch(err => {
+                console.error("Failed to generate image", err);
+            });
+        });
+    }
+
     let button = document.createElement('button');
     button.className = 'tab';
     button.setAttribute('role', 'tab');
@@ -345,8 +366,8 @@ function render_platform_chart(plays) {
 
     // Render platform over time chart into the fun stats panel (if available)
     try {
-        if (typeof renderPlatformOverTime === 'function') {
-            const plotEl = renderPlatformOverTime(plays, platform_grouping_type || 'device-type');
+        if (typeof renderSvgPlatformOverTime === 'function') {
+            const plotEl = renderSvgPlatformOverTime(plays, platform_grouping_type || 'device-type');
             const container = section.querySelector('#platform-chart-container');
             if (container) {
                 if (plotEl && plotEl.nodeType) {
@@ -403,14 +424,14 @@ async function load_history(files) {
 function set_tab_listeners() {
     const tabs = document.querySelectorAll('.tab');
     const panels = document.querySelectorAll('.panel');
-    tabs.forEach(tab => tab.removeEventListener('click', () => {}));
+    tabs.forEach(tab => tab.removeEventListener('click', () => { }));
 
     tabs.forEach(tab => tab.addEventListener('click', () => {
-      tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
-      panels.forEach(p => p.setAttribute('aria-hidden', 'true'));
-      tab.setAttribute('aria-selected', 'true');
-      const panel = document.getElementById(tab.getAttribute('aria-controls'));
-      if (panel) panel.setAttribute('aria-hidden', 'false');
+        tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+        panels.forEach(p => p.setAttribute('aria-hidden', 'true'));
+        tab.setAttribute('aria-selected', 'true');
+        const panel = document.getElementById(tab.getAttribute('aria-controls'));
+        if (panel) panel.setAttribute('aria-hidden', 'false');
     }));
 }
 
