@@ -151,7 +151,7 @@ export function generateImageForYear(plays, podcast_plays, year) {
     const last_play = new Date(plays_by_date[plays_by_date.length - 1][1].ts);
 
     return new Promise((resolve, reject) => {
-        const scale = 2;
+        const scale = window.innerWidth < 768 ? 1 : 2;
         let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d');
         const width = 800 * scale;
@@ -393,7 +393,7 @@ export function generateImageForFunStats(result) {
             }
         };
 
-        const scale = 2;
+        const scale = window.innerWidth < 768 ? 1 : 2;
         let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d');
         const width = 800 * scale;
