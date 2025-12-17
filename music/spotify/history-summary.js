@@ -95,6 +95,9 @@ function render_stats(plays, podcast_plays, year = 0) {
     section.setAttribute('aria-hidden', 'true');
     section.innerHTML = `
         <div class="card" style="position: relative;">
+            <a id="open-in-tab-${year}" href="#" title="Open Summary in Tab" class="open-in-tab-icon" style="position: absolute; top: 10px; right: 40px; cursor: pointer; z-index: 1;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
             <a id="download-summary-icon-${year}" href="#" title="Download Summary Image" class="download-icon" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 1;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
             </a>
@@ -190,6 +193,21 @@ function render_stats(plays, podcast_plays, year = 0) {
         });
     }
 
+    const openInTabIcon = section.querySelector(`#open-in-tab-${year}`);
+    if (openInTabIcon) {
+        openInTabIcon.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            generateImageForYear(plays, podcast_plays, year).then(url => {
+                const newTab = window.open(url, '_blank');
+                newTab.focus();
+            }).catch(err => {
+                console.error("Failed to generate image", err);
+            });
+        });
+    }
+
     set_tab_listeners();
 
     previous_year = year;
@@ -224,6 +242,9 @@ function render_fun_stats(result) {
     section.setAttribute('aria-hidden', 'true');
     section.innerHTML = `
         <div class="card" style="position: relative;">
+            <a id="open-in-tab-stats" href="#" title="Open Summary in Tab" class="open-in-tab-icon" style="position: absolute; top: 10px; right: 40px; cursor: pointer; z-index: 1;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
             <a id="download-summary-icon-stats" href="#" title="Download Summary Image" class="download-icon" style="position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 1;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
             </a>
@@ -338,6 +359,21 @@ function render_fun_stats(result) {
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
+            }).catch(err => {
+                console.error("Failed to generate image", err);
+            });
+        });
+    }
+
+    const openInTabIcon = section.querySelector(`#open-in-tab-stats`);
+    if (openInTabIcon) {
+        openInTabIcon.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            generateImageForFunStats(result).then(url => {
+                const newTab = window.open(url, '_blank');
+                newTab.focus();
             }).catch(err => {
                 console.error("Failed to generate image", err);
             });
