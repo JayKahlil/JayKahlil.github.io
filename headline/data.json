@@ -741,6 +741,16 @@
                 "leader": "Nigel Farage"
             }
         ],
+        "assertions": [
+            {
+                "text": "yes",
+                "secondary": "in fact"
+            },
+            {
+                "text": "no",
+                "secondary": "not"
+            }
+        ],
         "partiesPossesive": [
             {
                 "text": "Tories'"
@@ -773,6 +783,35 @@
             },
             {
                 "text": "bonus"
+            }
+        ],
+        "otherActions": [
+            {
+                "text": "wrongdoing"
+            },
+            {
+                "text": "fun"
+            },
+            {
+                "text": "corruption"
+            },
+            {
+                "text": "conspiracy"
+            },
+            {
+                "text": "stupidity"
+            },
+            {
+                "text": "incompetence"
+            },
+            {
+                "text": "dishonesty"
+            },
+            {
+                "text": "the times"
+            },
+            {
+                "text": "desperation"
             }
         ]
     },
@@ -1047,6 +1086,43 @@
                 ],
                 [
                     "subjects"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} told that, ${vars[1]}, ${vars[2]} are ${vars[3]} '${vars[4]} ${vars[5]} in ${vars[6]}'",
+            "types": [
+                [
+                    "people"
+                ],
+                [
+                    "assertions[].text"
+                ],
+                [
+                    "groups"
+                ],
+                [
+                    "assertions[].secondary"
+                ],
+                [
+                    "actions"
+                ],
+                [
+                    "things"
+                ],
+                [
+                    "places"
+                ]
+            ]
+        },
+        {
+            "template": "Being mentioned in the ${vars[0]} files is not a sign of ${vars[1]}",
+            "types": [
+                [
+                    "people", "subjects", "places", "things"
+                ],
+                [
+                    "otherActions"
                 ]
             ]
         }

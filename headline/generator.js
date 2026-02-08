@@ -35,6 +35,7 @@ export async function generateHeadline() {
     let headline = templateObject.template;
     let person = null;
     let party = null;
+    let assertion = null;
     for (let i = 0; i < templateObject.types.length; i++) {
         let types = templateObject.types[i];
         for (let j = 0; j < types.length; j++) {
@@ -50,6 +51,11 @@ export async function generateHeadline() {
                     party = parts['parties'][Math.floor(Math.random() * parts['parties'].length)];
                 }
                 positionalPart = party[positionalType.split('parties[].')[1]];
+            } else if (positionalType.includes('assertions[].')) {
+                if (!assertion) {
+                    assertion = parts['assertions'][Math.floor(Math.random() * parts['assertions'].length)];
+                }
+                positionalPart = assertion[positionalType.split('assertions[].')[1]];
             } else {
                 positionalPart = parts[positionalType][Math.floor(Math.random() * parts[positionalType].length)].text;
             }
