@@ -15,6 +15,10 @@ body {
 	margin: 30px 6%;
 }
 
+#headline::first-letter {
+    text-transform: capitalize;
+}
+
 #red {
 	background-color: #bb1919;
 	height: 56px;

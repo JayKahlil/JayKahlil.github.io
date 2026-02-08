@@ -1,0 +1,1054 @@
+{
+    "parts": {
+        "people": [
+            {
+                "text": "PM",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "Education Secretary",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "Health Secretary",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "Boris",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Prince Charles",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "The Queen",
+                "pronounClaim": "she claims"
+            },
+            {
+                "text": "Opposition",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "a Tory",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "last Lib Dem",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "Scotland Yard",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "Pope",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "top scientist",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "Johnson",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Sturgeon",
+                "pronounClaim": "she claims"
+            },
+            {
+                "text": "Gavin Williamson",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Dominic Cummings",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Duchess of Sussex",
+                "pronounClaim": "she claims"
+            },
+            {
+                "text": "Jacob Rees-Mogg",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Jeremy Corbyn",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Jeremy Clarkson",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Piers Morgan",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Nigel Farage",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Matt Hancock",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Keir Starmer",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "The King",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Russian sausage tycoon",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "man",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "woman",
+                "pronounClaim": "she claims"
+            },
+            {
+                "text": "child",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "Mexican president",
+                "pronounClaim": "they claim"
+            },
+            {
+                "text": "Rishi Sunak",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "Count Binface",
+                "pronounClaim": "he claims"
+            },
+            {
+                "text": "whistle blower",
+                "pronounClaim": "they claim"
+            }
+        ],
+        "groups": [
+            {
+                "text": "immigrants"
+            },
+            {
+                "text": "vegans"
+            },
+            {
+                "text": "geese"
+            },
+            {
+                "text": "the working class"
+            },
+            {
+                "text": "Britons"
+            }
+        ],
+        "subjects": [
+            {
+                "text": "face masks"
+            },
+            {
+                "text": "quarantine"
+            },
+            {
+                "text": "self isolation"
+            },
+            {
+                "text": "tomato soup"
+            },
+            {
+                "text": "Big Ben"
+            },
+            {
+                "text": "fun"
+            },
+            {
+                "text": "eggs"
+            },
+            {
+                "text": "hand sanitiser"
+            },
+            {
+                "text": "A-levels"
+            },
+            {
+                "text": "GCSEs"
+            },
+            {
+                "text": "Storm Francis"
+            },
+            {
+                "text": "Union Jack"
+            },
+            {
+                "text": "election"
+            },
+            {
+                "text": "virus"
+            },
+            {
+                "text": "French fries"
+            },
+            {
+                "text": "Greek yogurt"
+            },
+            {
+                "text": "COVID-19"
+            },
+            {
+                "text": "Coronavirus"
+            },
+            {
+                "text": "driving tests"
+            },
+            {
+                "text": "MOTs"
+            },
+            {
+                "text": "government approved exercise"
+            },
+            {
+                "text": "mutant algorithm"
+            },
+            {
+                "text": "hacked emails"
+            },
+            {
+                "text": "exams"
+            },
+            {
+                "text": "fish and chips"
+            },
+            {
+                "text": "sunday roast"
+            },
+            {
+                "text": "Brexit"
+            },
+            {
+                "text": "vaccine"
+            },
+            {
+                "text": "pandemic"
+            },
+            {
+                "text": "TikTok"
+            },
+            {
+                "text": "Shrove Tuesday"
+            },
+            {
+                "text": "BBC"
+            },
+            {
+                "text": "second wave"
+            },
+            {
+                "text": "social gatherings of more than six people"
+            },
+            {
+                "text": "Excel spreadsheets"
+            },
+            {
+                "text": "£12 billion for the boys"
+            },
+            {
+                "text": "three tier system"
+            },
+            {
+                "text": "tier 1"
+            },
+            {
+                "text": "tier 2"
+            },
+            {
+                "text": "tier 3"
+            },
+            {
+                "text": "school meals"
+            },
+            {
+                "text": "Boxing day sales"
+            },
+            {
+                "text": "smart phones"
+            },
+            {
+                "text": "national service"
+            },
+            {
+                "text": "military draft"
+            }
+        ],
+        "actions": [
+            {
+                "text": "banned"
+            },
+            {
+                "text": "required"
+            },
+            {
+                "text": "mandated"
+            },
+            {
+                "text": "outlawed"
+            },
+            {
+                "text": "hoax"
+            },
+            {
+                "text": "rigged"
+            },
+            {
+                "text": "deadly"
+            },
+            {
+                "text": "legalised"
+            }
+        ],
+        "actions2": [
+            {
+                "text": "U-turn"
+            }
+        ],
+        "preps": [
+            {
+                "text": "for"
+            },
+            {
+                "text": "in"
+            }
+        ],
+        "places": [
+            {
+                "text": "Scotland"
+            },
+            {
+                "text": "Wales"
+            },
+            {
+                "text": "England"
+            },
+            {
+                "text": "Northern Ireland"
+            },
+            {
+                "text": "B&Q"
+            },
+            {
+                "text": "Lidl Middle Aisle"
+            },
+            {
+                "text": "M&S"
+            },
+            {
+                "text": "Tesco"
+            },
+            {
+                "text": "Principality of Sealand"
+            },
+            {
+                "text": "polling booth"
+            },
+            {
+                "text": "Dover"
+            },
+            {
+                "text": "Parliament"
+            },
+            {
+                "text": "Durham"
+            },
+            {
+                "text": "Waitrose"
+            },
+            {
+                "text": "Wetherspoons"
+            },
+            {
+                "text": "the Peak District"
+            },
+            {
+                "text": "a box"
+            },
+            {
+                "text": "Eton"
+            },
+            {
+                "text": "car park in Leicester"
+            }
+        ],
+        "pluralPlaces": [
+            {
+                "text": "secondary schools"
+            },
+            {
+                "text": "universities"
+            },
+            {
+                "text": "airports"
+            },
+            {
+                "text": "pubs"
+            },
+            {
+                "text": "colleges"
+            },
+            {
+                "text": "care homes"
+            }
+        ],
+        "pActions": [
+            {
+                "text": "resigns"
+            },
+            {
+                "text": "let go"
+            },
+            {
+                "text": "fired"
+            },
+            {
+                "text": "given promotion"
+            },
+            {
+                "text": "suspended"
+            },
+            {
+                "text": "suspended with full pay"
+            },
+            {
+                "text": "jailed"
+            },
+            {
+                "text": "sentenced"
+            },
+            {
+                "text": "deported"
+            },
+            {
+                "text": "lonely"
+            }
+        ],
+        "links": [
+            {
+                "text": "amid"
+            },
+            {
+                "text": "after"
+            },
+            {
+                "text": "over"
+            }
+        ],
+        "events": [
+            {
+                "text": "scandal"
+            },
+            {
+                "text": "controversy"
+            },
+            {
+                "text": "disaster"
+            },
+            {
+                "text": "plot"
+            },
+            {
+                "text": "protests"
+            },
+            {
+                "text": "dispute"
+            },
+            {
+                "text": "riots"
+            },
+            {
+                "text": "fiasco"
+            },
+            {
+                "text": "celebration"
+            }
+        ],
+        "activities": [
+            {
+                "text": "spotted in"
+            },
+            {
+                "text": "takes trip to"
+            },
+            {
+                "text": "flees"
+            },
+            {
+                "text": "trapped in"
+            }
+        ],
+        "groupActions": [
+            {
+                "text": "unionise"
+            },
+            {
+                "text": "strike"
+            }
+        ],
+        "emotions": [
+            {
+                "text": "anger"
+            },
+            {
+                "text": "outrage"
+            }
+        ],
+        "values": [
+            {
+                "text": "'expert in trade'"
+            },
+            {
+                "text": "'dangerous'"
+            },
+            {
+                "text": "'totally irresponsible'"
+            },
+            {
+                "text": "'my favourite'"
+            }
+        ],
+        "attributions": [
+            {
+                "text": "says"
+            },
+            {
+                "text": "claims"
+            },
+            {
+                "text": "remarks"
+            },
+            {
+                "text": "according to"
+            },
+            {
+                "text": "alleges"
+            }
+        ],
+        "thoseNotToBeTrusted": [
+            {
+                "text": "Russian state media"
+            },
+            {
+                "text": "man in trenchcoat"
+            },
+            {
+                "text": "man covered in blood"
+            },
+            {
+                "text": "man covered in ketchup"
+            },
+            {
+                "text": "Boeing"
+            },
+            {
+                "text": "sticky guy"
+            }
+        ],
+        "suspiciousFates": [
+            {
+                "text": "'fell out of window'"
+            },
+            {
+                "text": "'suffered a heart attack'"
+            },
+            {
+                "text": "'ran into a door'"
+            },
+            {
+                "text": "'fell down stairs'"
+            },
+            {
+                "text": "'fell on knife'"
+            },
+            {
+                "text": "'fell on knife, repeatedly'"
+            },
+            {
+                "text": "got lost swimming"
+            }
+        ],
+        "adjectives": [
+            {
+                "text": "Russian"
+            },
+            {
+                "text": "American"
+            },
+            {
+                "text": "French"
+            },
+            {
+                "text": "Saudi"
+            },
+            {
+                "text": "Eccentric"
+            }
+        ],
+        "things": [
+            {
+                "text": "whale"
+            },
+            {
+                "text": "sausage"
+            },
+            {
+                "text": "cactus"
+            },
+            {
+                "text": "vodka"
+            },
+            {
+                "text": "chocolate"
+            },
+            {
+                "text": "roller coaster"
+            },
+            {
+                "text": "Frisbee"
+            },
+            {
+                "text": "lasagne"
+            },
+            {
+                "text": "oil"
+            },
+            {
+                "text": "caviar"
+            },
+            {
+                "text": "penguin"
+            },
+            {
+                "text": "corn"
+            },
+            {
+                "text": "silk"
+            }
+        ],
+        "types": [
+            {
+                "text": "magnate"
+            },
+            {
+                "text": "tycoon"
+            },
+            {
+                "text": "baron"
+            },
+            {
+                "text": "mogul"
+            },
+            {
+                "text": "merchant"
+            }
+        ],
+        "things2": [
+            {
+                "text": "an elf"
+            },
+            {
+                "text": "the moon"
+            },
+            {
+                "text": "your mum"
+            },
+            {
+                "text": "a UFO"
+            },
+            {
+                "text": "bigfoot"
+            },
+            {
+                "text": "jesus"
+            },
+            {
+                "text": "for dinner"
+            },
+            {
+                "text": "a new invention"
+            },
+            {
+                "text": "cool"
+            },
+            {
+                "text": "scary"
+            },
+            {
+                "text": "icky"
+            },
+            {
+                "text": "dijon mustard"
+            }
+        ],
+        "parties": [
+            {
+                "text": "Tories",
+                "leader": "Kemi Badenoch"
+            },
+            {
+                "text": "Conservatives",
+                "leader": "Kemi Badenoch"
+            },
+            {
+                "text": "Labour",
+                "leader": "Keir Starmer"
+            },
+            {
+                "text": "Greens",
+                "leader": "Zack Polanski"
+            },
+            {
+                "text": "Lib Dems",
+                "leader": "Ed Davey"
+            },
+            {
+                "text": "Count Binface",
+                "leader": "Count Binface"
+            },
+            {
+                "text": "SNP",
+                "leader": "John Swinney"
+            },
+            {
+                "text": "Plaid Cymru",
+                "leader": "Rhun ap Iorwerth"
+            },
+            {
+                "text": "DUP",
+                "leader": "Gavin Robinson"
+            },
+            {
+                "text": "Sinn Fein",
+                "leader": "Mary Lou McDonald"
+            },
+            {
+                "text": "Reform",
+                "leader": "Nigel Farage"
+            }
+        ],
+        "partiesPossesive": [
+            {
+                "text": "Tories'"
+            },
+            {
+                "text": "Labour's"
+            },
+            {
+                "text": "Greens'"
+            },
+            {
+                "text": "Lib Dems'"
+            },
+            {
+                "text": "Count Binface's"
+            }
+        ],
+        "policyTypes": [
+            {
+                "text": "mandatory"
+            },
+            {
+                "text": "compulsory"
+            },
+            {
+                "text": "a ban on"
+            },
+            {
+                "text": "free"
+            },
+            {
+                "text": "bonus"
+            }
+        ]
+    },
+    "templates": [
+        {
+            "template": "${vars[0]} ${vars[1]} says ${vars[2]}",
+            "types": [
+                [
+                    "people",
+                    "subjects"
+                ],
+                [
+                    "actions"
+                ],
+                [
+                    "people"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]}",
+            "types": [
+                [
+                    "subjects"
+                ],
+                [
+                    "actions", "actions2"
+                ],
+                [
+                    "preps"
+                ],
+                [
+                    "places"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} for ${vars[2]}",
+            "types": [
+                [
+                    "subjects"
+                ],
+                [
+                    "actions", "actions2"
+                ],
+                [
+                    "pluralPlaces"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]} ${vars[4]}",
+            "types": [
+                [
+                    "people", "groups"
+                ],
+                [
+                    "pActions"
+                ],
+                [
+                    "links"
+                ],
+                [
+                    "people", "subjects", "places"
+                ],
+                [
+                    "events"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]}",
+            "types": [
+                [
+                    "people", "groups"
+                ],
+                [
+                    "activities"
+                ],
+                [
+                    "places"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]} ${vars[4]}",
+            "types": [
+                [
+                    "groups"
+                ],
+                [
+                    "groupActions"
+                ],
+                [
+                    "links"
+                ],
+                [
+                    "people", "subjects", "places"
+                ],
+                [
+                    "events"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]}",
+            "types": [
+                [
+                    "emotions"
+                ],
+                [
+                    "links"
+                ],
+                [
+                    "people", "subjects", "places"
+                ],
+                [
+                    "events"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]}",
+            "types": [
+                [
+                    "people"
+                ],
+                [
+                    "values"
+                ],
+                [
+                    "attributions"
+                ],
+                [
+                    "people"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]}",
+            "types": [
+                [
+                    "people"
+                ],
+                [
+                    "suspiciousFates"
+                ],
+                [
+                    "attributions"
+                ],
+                [
+                    "thoseNotToBeTrusted"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]} ${vars[4]} ${vars[5]}",
+            "types": [
+                [
+                    "adjectives"
+                ],
+                [
+                    "things"
+                ],
+                [
+                    "types"
+                ],
+                [
+                    "suspiciousFates"
+                ],
+                [
+                    "attributions"
+                ],
+                [
+                    "thoseNotToBeTrusted"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]} ${vars[4]}",
+            "types": [
+                [
+                    "adjectives"
+                ],
+                [
+                    "things"
+                ],
+                [
+                    "types"
+                ],
+                [
+                    "activities"
+                ],
+                [
+                    "places"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} ${vars[1]} ${vars[2]} ${vars[3]}",
+            "types": [
+                [
+                    "adjectives"
+                ],
+                [
+                    "things"
+                ],
+                [
+                    "types"
+                ],
+                [
+                    "pActions"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} posts photo of what ${vars[1]} is ${vars[2]}",
+            "types": [
+                [
+                    "people[].text"
+                ],
+                [
+                    "people[].pronounClaim"
+                ],
+                [
+                    "things2"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} will introduce ${vars[1]} ${vars[2]} if elected says ${vars[3]}",
+            "types": [
+                [
+                    "parties[].text"
+                ],
+                [
+                    "policyTypes"
+                ],
+                [
+                    "subjects"
+                ],
+                [
+                    "parties[].leader"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]}: ${vars[1]} promise ${vars[2]} ${vars[3]}",
+            "types": [
+                [
+                    "parties[].leader"
+                ],
+                [
+                    "parties[].text"
+                ],
+                [
+                    "policyTypes"
+                ],
+                [
+                    "subjects"
+                ]
+            ]
+        },
+        {
+            "template": "${vars[0]} pledge to fix ${vars[1]} 'disastrous' ${vars[2]}",
+            "types": [
+                [
+                    "parties"
+                ],
+                [
+                    "partiesPossesive"
+                ],
+                [
+                    "subjects"
+                ]
+            ]
+        }
+    ]
+}

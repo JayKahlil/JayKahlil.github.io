@@ -1,389 +1,8 @@
-const people = [
-    "PM",
-    "Education Secretary",
-    "Health Secretary",
-    "Boris",
-    "Prince Charles",
-    "The Queen",
-    "Opposition",
-    "a Tory",
-    "last Lib Dem",
-    "Scotland Yard",
-    "Pope",
-    "top scientist",
-    "Johnson",
-    "Sturgeon",
-    "Gavin Williamson",
-    "Dominic Cummings",
-    "Duchess of Sussex",
-    "Jacob Rees-Mogg",
-    "Jeremy Corbyn",
-    "Jeremy Clarkson",
-    "Piers Morgan",
-    "Nigel Farage",
-    "Matt Hancock",
-    "Keir Starmer",
-    "The King",
-    "Russian sausage tycoon",
-    "man",
-    "woman",
-    "child",
-    "Mexican president",
-    "Rishi Sunak",
-    "Count Binface",
-    "whistle blower"
-];
-const pronounClaim = [
-    "they claim",
-    "they claim",
-    "they claim",
-    "he claims",
-    "he claims",
-    "she claims",
-    "they claim",
-    "they claim",
-    "they claim",
-    "they claim",
-    "he claims",
-    "they claim",
-    "he claims",
-    "she claims",
-    "he claims",
-    "he claims",
-    "she claims",
-    "he claims",
-    "he claims",
-    "he claims",
-    "he claims",
-    "he claims",
-    "he claims",
-    "he claims",
-    "they claim",
-    "he claims",
-    "she claims",
-    "they claim",
-    "they claim"
-];
-const groups = [
-    "immigrants",
-    "vegans",
-    "geese",
-    "the working class",
-    "Britons",
-    "migrants",
-];
-const subjects = [
-    "face masks",
-    "quarantine",
-    "self isolation",
-    "tomato soup",
-    "Big Ben",
-    "fun",
-    "eggs",
-    "hand sanitiser",
-    "A-levels",
-    "GCSEs",
-    "Storm Francis",
-    "Union Jack",
-    "election",
-    "virus",
-    "French fries",
-    "Greek yogurt",
-    "COVID-19",
-    "Coronavirus",
-    "driving tests",
-    "MOTs",
-    "government approved exercise",
-    "mutant algorithm",
-    "hacked emails",
-    "exams",
-    "fish and chips",
-    "sunday roast",
-    "Brexit",
-    "vaccine",
-    "pandemic",
-    "TikTok",
-    "Shrove Tuesday",
-    "BBC",
-    "second wave",
-    "social gatherings of more than six people",
-    "Excel spreadsheets",
-    "£12 billion for the boys",
-    "three tier system",
-    "tier 1",
-    "tier 2",
-    "tier 3",
-    "school meals",
-    "Boxing day sales",
-    "smart phones",
-    "national service",
-    "military draft"
-];
-const actions = [
-    "banned",
-    "required",
-    "mandated",
-    "outlawed",
-    "hoax",
-    "rigged",
-    "deadly",
-    "legalised"
-];
-const actions2 = [
-    "U-turn"
-];
-const preps = [
-    "for",
-    "in"
-];
-const places = [
-    "Scotland",
-    "Wales",
-    "England",
-    "Northern Ireland",
-    "B&Q",
-    "Lidl Middle Aisle",
-    "M&S",
-    "Tesco",
-    "Principality of Sealand",
-    "polling booth",
-    "Dover",
-    "Parliament",
-    "Durham",
-    "Waitrose",
-    "Wetherspoons",
-    "the Peak District",
-    "a box",
-    "Eton",
-    "car park in Leicester"
-];
-const pluralPlaces = [
-    "secondary schools",
-    "universities",
-    "airports",
-    "pubs",
-    "colleges",
-    "care homes"
-];
-const pActions = [
-    "resigns",
-    "let go",
-    "fired",
-    "given promotion",
-    "suspended",
-    "suspended with full pay",
-    "jailed",
-    "sentenced",
-    "deported",
-    "lonely"
-];
-const links = [
-    "amid",
-    "after",
-    "over"
-];
-const events = [
-    "scandal",
-    "controversy",
-    "disaster",
-    "plot",
-    "protests",
-    "dispute",
-    "riots",
-    "fiasco",
-    "celebration"
-];
-const activities = [
-    "spotted in",
-    "takes trip to",
-    "flees",
-    "trapped in"
-];
-const groupActions = [
-    "unionise",
-    "strike"
-];
-const emotions = [
-    "anger",
-    "outrage"
-];
-const values = [
-    "'expert in trade'",
-    "'dangerous'",
-    "'totally irresponsible'",
-    "'my favourite'"
-];
-const attributions = [
-    "says",
-    "claims",
-    "remarks",
-    "according to",
-    "alleges"
-];
-const thoseNotToBeTrusted = [
-    "Russian state media",
-    "man in trenchcoat",
-    "man covered in blood",
-    "man covered in ketchup",
-    "Boeing",
-    "sticky guy"
-];
-const suspiciousFates = [
-    "'fell out of window'",
-    "'suffered a heart attack'",
-    "'ran into a door'",
-    "'fell down stairs'",
-    "'fell on knife'",
-    "'fell on knife, repeatedly'",
-    "got lost swimming"
-];
-const adjectives = [
-    "Russian",
-    "American",
-    "French",
-    "Saudi",
-    "Eccentric"
-];
-const things = [
-    "whale",
-    "sausage",
-    "cactus",
-    "vodka",
-    "chocolate",
-    "roller coaster",
-    "Frisbee",
-    "lasagne",
-    "oil",
-    "caviar",
-    "penguin",
-    "corn",
-    "silk"
-];
-const types = [
-    "magnate",
-    "tycoon",
-    "baron",
-    "mogul",
-    "merchant"
-];
-const things2 = [
-    "an elf",
-    "the moon",
-    "your mum",
-    "a UFO",
-    "bigfoot",
-    "jesus",
-    "for dinner",
-    "a new invention",
-    "cool",
-    "scary",
-    "icky",
-    "dijon mustard"
-];
-const parties = [
-    "Tories",
-    "Conservatives",
-    "Labour",
-    "Greens",
-    "Greens",
-    "Lib Dems",
-    "Count Binface",
-];
-const partiesPossesive = [
-    "Tories'",
-    "Labour's",
-    "Greens'",
-    "Lib Dems'",
-    "Count Binface's",
-];
-const leaders = [
-    "Rishi Sunak",
-    "Rishi Sunak",
-    "Keir Starmer",
-    "Carla Denyer",
-    "Adrian Ramsay",
-    "Ed Davey",
-    "Count Binface"
-];
-const policyTypes = [
-    "mandatory",
-    "compulsory",
-    "a ban on",
-    "free",
-    "bonus"
-];
-const binaryAnswers = [
-    "yes",
-    "no"
-];
-const binaryConclusions = [
-    "in fact",
-    "not"
-];
+import { generateHeadline, loadData } from './generator.js';
 
-const correspondingLists = {
-    people: pronounClaim,
-    parties: leaders,
-    binaryAnswers: binaryConclusions
-};
-
-const peopleAndSubjects = [...people, ...subjects];
-const allActions = [...actions, ...actions2];
-const peopleSubjectsPlaces = [...peopleAndSubjects, ...places];
-const allPeople = [...people, ...groups];
-
-var templateValues = [];
-
-const templates = [
-    ["%s %s says %s", [peopleAndSubjects, actions, people]],
-    ["%s %s %s %s", [subjects, allActions, preps, places]],
-    ["%s %s for %s", [subjects, allActions, pluralPlaces]],
-    ["%s %s %s %s %s", [allPeople, pActions, links, peopleSubjectsPlaces, events]],
-    ["%s %s %s", [allPeople, activities, places]],
-    ["%s %s %s %s %s", [groups, groupActions, links, peopleSubjectsPlaces, events]],
-    ["%s %s %s %s", [emotions, links, peopleSubjectsPlaces, events]],
-    ["%s %s %s %s", [people, values, attributions, people]],
-    ["%s %s %s %s", [people, suspiciousFates, attributions, thoseNotToBeTrusted]],
-    ["%s %s %s %s %s %s", [adjectives, things, types, suspiciousFates, attributions, thoseNotToBeTrusted]],
-    ["%s %s %s %s %s", [adjectives, things, types, activities, places]],
-    ["%s %s %s %s", [adjectives, things, types, pActions]],
-    ["%s posts photo of what %s is %s", [people, pronounClaim, things2]],
-    ["%s will introduce %s %s if elected says %s", [parties, policyTypes, subjects, leaders]],
-    ["%s: %s promise %s %s", [leaders, parties, policyTypes, subjects]],
-    ["%s pledge to fix %s 'disastrous' %s", [parties, partiesPossesive, subjects]],
-    ["%s told that, %s, %s are %s '%s %s in %s'", [people, ["yes", "no"], groups, ["in fact", "not"], actions, things, places]],
-]
-
-
-function generateHeadline() {
-    // Get random template and its values array
-    const [template, templateFills] = templates[Math.floor(Math.random() * templates.length)];
-    
-    templateFills.forEach((options, i) => {
-        templateValues[i] = getRandomElement(options);
-    });
-    
-    return format(template, ...templateValues);
-}
-
-function format(template, ...args) {
-    return template.replace(/%s/g, () => args.shift());
-}
-
-var currentCorrespondingChoice = null;
-var currentCorrespondingList = null;
-function getRandomElement(arr) {
-    if (arr === currentCorrespondingList)
-
-    const randomIndex = Math.floor(Math.random() * arr.length);
-    if (arr in correspondingLists) {
-        const correspondingList = correspondingLists[arr];
-        currentCorrespondingChoice = correspondingList[randomIndex];
-        currentCorrespondingList = correspondingList;
-    }
-
-    return arr[randomIndex];
-}
+// Kick off a background prefetch so the first call to generateHeadline is fast.
+// loadData() caches its promise, so this only fetches once.
+loadData().catch(err => console.warn('Headline data prefetch failed', err));
 
 document.body.onkeyup = function (e) {
     if (e.keyCode == 32) {
@@ -391,10 +10,18 @@ document.body.onkeyup = function (e) {
     }
 }
 
-function makeNews() {
+async function makeNews() {
     document.getElementById("image-container").style.display = "none";
     document.getElementById("loader").style.display = "inherit";
-    var headline = generateHeadline();
+
+    // Wait for data to be loaded inside generateHeadline()
+    let headline = null;
+    try {
+        headline = await generateHeadline();
+    } catch (err) {
+        console.error('Failed to generate headline:', err);
+        headline = 'Could not generate headline';
+    }
 
     document.getElementById("headline").textContent = headline;
     document.title = headline;
@@ -443,9 +70,9 @@ function processWikimediaJson(json) {
     var meta = extmetadata.pop();
 
     image.src = jpg.pop();
-    image.alt = meta.hasOwnProperty('ImageDescription') ? meta.ImageDescription.value : "";
+    image.alt = Object.prototype.hasOwnProperty.call(meta, 'ImageDescription') ? meta.ImageDescription.value : "";
 
-    if (meta.hasOwnProperty('UsageTerms')) {
+    if (Object.prototype.hasOwnProperty.call(meta, 'UsageTerms')) {
         if (meta.UsageTerms.value == "Public domain") {
             document.getElementById("public-domain").style.display = "inline";
             document.getElementById("real-licence").style.display = "none";
@@ -456,13 +83,13 @@ function processWikimediaJson(json) {
             document.getElementById("licence-url").textContent = meta.UsageTerms.value;
         }
     }
-    if (meta.hasOwnProperty('LicenseUrl')) {
+    if (Object.prototype.hasOwnProperty.call(meta, 'LicenseUrl')) {
         document.getElementById("licence-url").href = meta.LicenseUrl.value;
     }
 
     document.getElementById("learn-more-link").href = wikimediaUrls.pop();;
 
-    document.getElementById("artist").textContent = stripHtml(meta.hasOwnProperty('Artist') ? meta.Artist.value : "");
+    document.getElementById("artist").textContent = stripHtml(Object.prototype.hasOwnProperty.call(meta, 'Artist') ? meta.Artist.value : "");
 }
 
 function stripHtml(html) {
@@ -474,3 +101,6 @@ function stripHtml(html) {
 window.onload = makeNews;
 document.getElementById("image-container").style.display = "none";
 document.getElementById("loader").style.display = "inherit";
+
+// Expose makeNews to the global scope so inline onclick attributes can call it
+window.makeNews = makeNews;
