@@ -4,7 +4,7 @@ const analyser = audioContext.createAnalyser();
 
 const canvas = document.getElementById("canvas");
 const canvasContext = canvas.getContext("2d");
-const activeStreams = new Set();
+let microphoneStream;
 
 function resizeCanvas() {
   const devicePixelRatio = window.devicePixelRatio || 1;
@@ -57,26 +57,19 @@ function drawVisualisation() {
   canvasContext.stroke();
 }
 
-async function startRecording(getStream) {
+async function startRecording() {
   if (audioContext.state === "suspended") {
     await audioContext.resume();
   }
 
-  if (navigator.mediaDevices && getStream) {
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     try {
-      const stream = await getStream();
-      stream.getVideoTracks().forEach((track) => track.stop());
-
-      if (stream.getAudioTracks().length === 0) {
-        throw new Error("No audio track was shared. Select a source with audio enabled.");
-      }
-
-      activeStreams.add(stream);
-      audioContext.createMediaStreamSource(stream).connect(analyser);
+      microphoneStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioContext.createMediaStreamSource(microphoneStream).connect(analyser);
       drawVisualisation();
       return true;
     } catch (err) {
-      console.error(`The following media capture error occurred: ${err}`);
+      console.error(`The following getUserMedia error occurred: ${err}`);
       return false;
     }
   } else {
@@ -86,8 +79,8 @@ async function startRecording(getStream) {
 
 async function stopRecording() {
   await audioContext.suspend();
-  activeStreams.forEach((stream) => stream.getTracks().forEach((track) => track.stop()));
-  activeStreams.clear();
+  microphoneStream?.getTracks().forEach((track) => track.stop());
+  microphoneStream = undefined;
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   console.log("Recording stopped.");
 }
@@ -99,7 +92,7 @@ function setButtonState(button, isRecording, label) {
   button.querySelector(".sr-only").textContent = `${isRecording ? "Stop" : "Start"} ${label}`;
 }
 
-function addRecordingButton(button, label, getStream) {
+function addRecordingButton(button, label) {
   button.addEventListener("click", async () => {
     const isRecording = button.dataset.recording === "true";
     const nextState = !isRecording;
@@ -107,7 +100,7 @@ function addRecordingButton(button, label, getStream) {
     setButtonState(button, nextState, label);
 
     if (nextState) {
-      const started = await startRecording(getStream);
+      const started = await startRecording();
       if (!started) {
         setButtonState(button, false, label);
       }
@@ -120,11 +113,4 @@ function addRecordingButton(button, label, getStream) {
 addRecordingButton(
   document.querySelector("#record-button"),
   "microphone recording",
-  () => navigator.mediaDevices.getUserMedia({ audio: true }),
-);
-
-addRecordingButton(
-  document.querySelector("#display-record-button"),
-  "display audio recording",
-  () => navigator.mediaDevices.getDisplayMedia({ audio: true, video: true, systemAudio: "include" }),
 );

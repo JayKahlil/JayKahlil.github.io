@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Visualiser</title>
-    <script type="module">
-      import { loadNav } from '/nav/nav.js';
-      loadNav('/visualiser');
-    </script>
     <style>
       :root {
         color-scheme: dark;
@@ -33,16 +29,11 @@
         height: 100dvh;
       }
 
-      .record-controls {
+      .record-button {
         position: fixed;
         z-index: 1;
         top: 24px;
         right: 24px;
-        display: grid;
-        gap: 16px;
-      }
-
-      .record-button {
         width: 96px;
         height: 96px;
         padding: 0;
@@ -103,15 +94,9 @@
     </style>
   </head>
   <body>
-    <div class="record-controls">
-      <button class="record-button" id="record-button" type="button" aria-label="Start microphone recording">
-        <span class="sr-only">Start microphone recording</span>
-      </button>
-
-      <button class="record-button" id="display-record-button" type="button" aria-label="Start display audio recording">
-        <span class="sr-only">Start display audio recording</span>
-      </button>
-    </div>
+    <button class="record-button" id="record-button" type="button" aria-label="Start microphone recording">
+      <span class="sr-only">Start microphone recording</span>
+    </button>
 
     <canvas id="canvas" width="1000" height="500"></canvas>
 
