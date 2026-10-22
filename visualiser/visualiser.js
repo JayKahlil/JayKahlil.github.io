@@ -26,22 +26,32 @@ const dataArray = new Uint8Array(bufferLength);
 analyser.getByteTimeDomainData(dataArray);
 
 function drawVisualisation() {
-  const drawVisual = requestAnimationFrame(drawVisualisation);
+  requestAnimationFrame(drawVisualisation);
   analyser.getByteTimeDomainData(dataArray);
+
+  // Calculate the microphone's overall volume (RMS), from 0 to 1.
+  let sumSquares = 0;
+  for (let i = 0; i < dataArray.length; i++) {
+    const sample = (dataArray[i] - 128) / 128;
+    sumSquares += sample * sample;
+  }
+  const loudness = Math.sqrt(sumSquares / dataArray.length);
+
   // Fill solid color
   canvasContext.fillStyle = "rgb(49, 49, 49)";
   canvasContext.fillRect(0, 0, window.innerWidth, window.innerHeight);
   // Begin the path
   canvasContext.lineWidth = 2;
-  canvasContext.strokeStyle = "rgb(13, 255, 0)";
+  // A quiet signal is blue; a loud signal moves towards red.
+  canvasContext.strokeStyle = getBlueToRedColor(loudness, 0, 0.25);
   canvasContext.beginPath();
   // Draw each point in the waveform
   const sliceWidth = window.innerWidth / bufferLength;
   let x = 0;
   for (let i = 0; i < bufferLength; i++) {
     const centreY = window.innerHeight / 2;
-    const aplitude = window.innerHeight * 0.45;
-    const y = centreY + ((dataArray[i] - 128) / 128) * aplitude;
+    const amplitude = window.innerHeight * 0.45;
+    const y = centreY + ((dataArray[i] - 128) / 128) * amplitude;
 
     if (i === 0) {
       canvasContext.moveTo(x, y);
@@ -55,6 +65,23 @@ function drawVisualisation() {
   // Finish the line
   canvasContext.lineTo(window.innerWidth, window.innerHeight / 2);
   canvasContext.stroke();
+}
+
+function getBlueToRedColor(value, min, max) {
+    // 1. Prevent division by zero if min and max are the same
+    if (min === max) return `hsl(0deg 100% 50%)`;
+
+    // 2. Clamp the incoming value strictly between your min and max boundaries
+    const clampedValue = Math.max(min, Math.min(max, value));
+
+    // 3. Normalize the value into a percentage percentage ratio (0.0 to 1.0)
+    const ratio = (clampedValue - min) / (max - min);
+
+    // 4. Interpolate from Blue (240) down to Red (0)
+    const hue = 240 - (ratio * 240);
+
+    // 5. Return the native CSS HSL string
+    return `hsl(${hue}deg 100% 50%)`;
 }
 
 async function startRecording() {
